@@ -1,0 +1,58 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+
+{% block breadcrumb-page %}
+    Proveedores
+{% endblock %}
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Proveedores
+{% endblock %}
+
+{% block columns %}
+    <th>Nombre</th>
+    <th>Telefono</th>
+    <th>Dirección</th>
+    <th>Estado</th>
+    <th class="text-center" width="200px">Acción</th>
+{% endblock %}
+
+{% block rows %}
+{% for supplier in object_list %}
+    <tr>
+        <td>{{ supplier.name.upper }}</td>
+        <td>{{ supplier.phone }}</td>
+        <td>{{ supplier.address }}</td>
+        {% if supplier.is_active %}
+        <td><div class="badge badge-success">Activado</div></td>
+        {% else %}
+        <td><div class="badge badge-danger">Desactivado</div></td>
+        {% endif %}
+        <td class="text-center">
+            <a class="btn btn-warning btn-flat btn-sm" href="{% url 'core:supplier-edit' supplier.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+            {% if supplier.is_active %}
+            <a class="btn btn-danger btn-flat btn-sm" href="{% url 'core:supplier-deactivate' supplier.pk %}">
+                <i class="fas fa-trash"></i>
+            </a>
+            {% else %}
+            <a class="btn btn-success btn-flat btn-sm" href="{% url 'core:supplier-activate' supplier.pk%}">
+                <i class="fas fa-check"></i>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block bottoms %}
+    <a class="btn btn-primary btn-flat" href="{% url 'core:supplier-add' %}">
+        <i class="fas fa-plus"></i> 
+        Nuevo registro
+    </a>
+{% endblock %}
+
+

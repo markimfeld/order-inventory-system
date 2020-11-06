@@ -1,0 +1,61 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+
+{% block breadcrumb-page %}
+    Ventas
+{% endblock %}
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Ventas
+{% endblock %}
+
+{% block columns %}
+    <th width="90px">Nro</th>
+    <th width="200px">Cliente</th>
+    <th width="300px">Fecha de registro</th>
+    <th class="text-center">Total</th>
+    <th class="text-center">Estado</th>
+    <th class="text-center" width="200px">Acción</th>
+{% endblock %}
+
+{% block rows %}
+{% for sale in object_list %}
+    <tr>
+        <td>{{ sale.id }}</td>
+        <td>{{ sale.customer.full_name.upper }}</td>
+        <td>{{ sale.created_at }}</td>
+        <td class="text-center">${{ sale.total }}</td>
+        {% if sale.status.name.lower == 'preparar' %}
+        <td class="text-center"><div class="badge badge-danger">Preparar</div></td>
+        {% elif sale.status.name.lower == 'listo' %}
+        <td class="text-center"><div class="badge badge-warning">Listo</div></td>
+        {% elif sale.status.name.lower == 'entregado' %}
+        <td class="text-center"><div class="badge badge-dark">Entregado</div></td>
+        {% else %}
+        <td class="text-center"><div class="badge badge-success">Pagado</div></td>
+        {% endif %}
+        <td class="text-center">
+            <a class="btn btn-info btn-flat btn-sm" href="{% url 'core:sale-detail' sale.pk %}">
+                <i class="fas fa-eye"></i>
+            </a>
+            <a class="btn btn-warning btn-flat btn-sm" href="{% url 'core:sale-edit' sale.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-danger btn-flat btn-sm" href="{% url 'core:sale-delete' sale.pk %}">
+                <i class="fas fa-trash"></i>
+            </a>
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block bottoms %}
+    <a class="btn btn-primary btn-flat" href="{% url 'core:sale-add' %}">
+        <i class="fas fa-plus"></i> 
+        Nuevo registro
+    </a>
+{% endblock %}
+
+

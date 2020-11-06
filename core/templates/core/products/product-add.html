@@ -1,0 +1,117 @@
+{% extends 'form.html' %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+
+{% block head %}
+{% endblock %}
+
+{% block breadcrumb-page %}
+    Productos 
+{% endblock %}
+
+
+{% block title %}
+    Nuevo registro
+{% endblock %}
+
+{% block field %}
+{{ form.errors }}
+<div class="row">
+    <div class="form-group col-6"> 
+        <label for="name">Nombre(*):</label> 
+        {{ form.name|add_class:'form-control'|attr:'placeholder:Escribe el nombre aquí...' }}
+    </div>
+    <div class="form-group col-6">
+        <label for="price">Precio de venta(*):</label>
+        {{ form.price|add_class:'form-control'|attr:'placeholder:Escribe el precio de venta aquí...'|attr:'min:0' }}
+    </div>
+    <div class="form-group col-12">
+        <label for="category">Categoria (*):</label>
+        {{ form.category|add_class:'form-control' }}
+    </div>
+    <div class="form-group col-6">
+        <label for="description">Descripcion:</label>
+        {{ form.description|add_class:'form-control'|attr:'placeholder:Escribe la descripcion aquí...' }}
+    </div>
+    <div class="form-group col-6">
+        <label for="image">Imagen:</label>
+        {{ form.image|add_class:'form-control' }}
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Añadir producto:</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Descripcion</th>
+                        <th class="text-center">¿Borrar?</th>
+                    </tr>
+                </thead>
+                <tbody id="form_set">
+                    {{ items.management_form }}
+                        {% for form in items.forms %}
+                        <tr>
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            <td width="200px">{{ form.item|add_class:'form-control' }}</td>
+                            <td width="200px">{{ form.quantity|add_class:'form-control' }}</td>
+                            <td>{{ form.description|add_class:'form-control' }}</td>
+                            <td class="text-center">{{ form.DELETE|add_class:'form-check-input' }}</td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+                <tbody id="empty_form" style="display:none;">
+                    <tr>
+                        <td width="200px">{{ items.empty_form.item|add_class:'form-control' }}</td>
+                        <td width="200px">{{ items.empty_form.quantity|add_class:'form-control' }}</td>
+                        <td>{{ items.empty_form.description|add_class:'form-control' }}</td>
+                        {% if items.can_delete %}
+                            <td class="text-center">{{ items.empty_form.DELETE|add_class:'form-check-input' }}</td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+
+            <input id="add_more" class="btn btn-link" type="button" value="Añadir producto">
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+{% endblock %}
+
+{% block bottoms %}
+    <button type="submit" class="btn btn-primary btn-flat">
+        <i class="fas fa-save"></i>
+        Guardar registro
+    </button>
+    <a href="{% url 'core:products' %}" class="btn btn-danger btn-flat">
+        <i class="fas fa-times"></i>
+        Cancelar
+    </a>
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+    $('#add_more').click(function() {
+        const form_idx = $('#id_get_items-TOTAL_FORMS').val();
+        $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+        $('#id_get_items-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+    });
+</script>
+
+{% endblock %}

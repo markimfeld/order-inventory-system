@@ -1,0 +1,40 @@
+{% extends 'form.html' %}
+
+{% load widget_tweaks %}
+
+{% block breadcrumb-page %}
+    Artículos 
+{% endblock %}
+
+
+{% block title %}
+    Nuevo registro
+{% endblock %}
+
+{% block field %}
+<div class="row">
+    <div class="form-group col-md-12">
+        <label for="exampleInputEmail1">Nombre(*):</label>
+        {{ form.name|add_class:'form-control'|attr:'placeholder:Escribe el nombre aquí...' }}
+    </div>
+    <div class="form-group col-md-12">
+        <label for="exampleInputEmail1">Descripcion:</label>
+        {{ form.description|add_class:'form-control'|attr:'placeholder:Escribe la descripcion aquí...' }}
+    </div>
+    <div class="form-group col-md-12">
+        <label for="exampleInputEmail1">Imagen:</label>
+        {{ form.image|add_class:'form-control' }}
+    </div>
+</div>
+{% endblock %}
+
+{% block bottoms %}
+    <button type="submit" class="btn btn-primary btn-flat">
+        <i class="fas fa-save"></i>
+        Guardar registro
+    </button>
+    <a href="{% url 'core:items' %}" class="btn btn-danger btn-flat">
+        <i class="fas fa-times"></i>
+        Cancelar
+    </a>
+{% endblock %}

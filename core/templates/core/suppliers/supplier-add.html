@@ -1,0 +1,38 @@
+{% extends 'form.html' %}
+
+{% load widget_tweaks %}
+
+{% block breadcrumb-page %}
+    Proveedores
+{% endblock %}
+
+
+{% block title %}
+    Nuevo registro
+{% endblock %}
+
+{% block field %}
+    <div class="form-group">
+        <label for="exampleInputEmail1">Nombre(*):</label>
+        {{ form.name|add_class:'form-control'|attr:'placeholder:Escribe el nombre de la categoria aqui...' }}
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Celular(*):</label>
+        {{ form.phone|add_class:'form-control'|attr:'placeholder:Escribe el celular aquí...' }}
+    </div>
+    <div class="form-group">
+        <label for="exampleInputEmail1">Dirección(*):</label>
+        {{ form.address|add_class:'form-control'|attr:'placeholder:Escribe la dirección aqui...' }}
+    </div>
+{% endblock %}
+
+{% block bottoms %}
+    <button type="submit" class="btn btn-primary btn-flat">
+        <i class="fas fa-save"></i>
+        Guardar registro
+    </button>
+    <a href="{% url 'core:suppliers' %}" class="btn btn-danger btn-flat">
+        <i class="fas fa-times"></i>
+        Cancelar
+    </a>
+{% endblock %}

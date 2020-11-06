@@ -1,0 +1,31 @@
+{% extends 'delete.html' %}
+
+
+
+{% block breadcrumb-page %}
+    Proveedores 
+{% endblock %}
+
+
+
+{% block title %}
+    Desactivar Proveedor    
+{% endblock %}
+
+
+
+{% block content-delete %}
+    Estas seguro de desactivar el proveedor {{ supplier }}
+{% endblock %}
+
+
+{% block bottoms %}
+    <button type="submit" class="btn btn-primary btn-flat">
+        <i class="fas fa-save"></i>
+        Desactivar
+    </button>
+    <a href="{% url 'core:suppliers' %}" class="btn btn-danger btn-flat">
+        <i class="fas fa-times"></i>
+        Cancelar
+    </a>
+{% endblock %}

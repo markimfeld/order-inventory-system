@@ -1,0 +1,65 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+
+{% block breadcrumb-page %}
+    Productos
+{% endblock %}
+
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Productos
+{% endblock %}
+
+{% block columns %}
+    <th>Nombre</th>
+    <th class="text-center">Categoria</th>
+    <th class="text-center">Precio de Venta</th>
+    <th class="text-center">Última actualización</th>
+    <th class="text-center">Imágen</th>
+    <th class="text-center">Estado</th>
+    <th class="text-center">Acción</th>
+{% endblock %} 
+{% block rows %}
+{% for product in object_list %}
+    <tr>
+        <td>{{ product.name.upper }}</td>
+        <td class="text-center">{{ product.category.name.upper }}</td>
+        <td class="text-center">${{ product.price }}</td>
+        <td class="text-center">{{ product.updated_at }}</td>
+        <td class="text-center"><img src="{{ product.image.url }}" alt="" width="30px" height="30px"></td>
+        {% if product.is_active %}
+        <td class="text-center"><div class="badge badge-success">Activado</div></td>
+        {% else %}
+        <td class="text-center"><div class="badge badge-danger">Desactivado</div></td>
+        {% endif %}
+        <td class="text-center">
+            <a class="btn btn-info btn-flat btn-sm" href="{% url 'core:product-detail' product.pk %}">
+                <i class="fas fa-eye"></i>
+            </a>
+            <a class="btn btn-warning btn-flat btn-sm" href="{% url 'core:product-edit' product.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+            {% if product.is_active %}
+            <a class="btn btn-danger btn-flat btn-sm" href="{% url 'core:product-deactivate' product.pk %}">
+                <i class="fas fa-trash"></i>
+            </a>
+            {% else %}
+            <a class="btn btn-success btn-flat btn-sm" href="{% url 'core:product-activate' product.pk %}">
+                <i class="fas fa-check"></i>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block bottoms %}
+<a class="btn btn-primary btn-flat" href="{% url 'core:product-add' %}">
+        <i class="fas fa-plus"></i> 
+        Nuevo registro
+    </a>
+{% endblock %}
+
+

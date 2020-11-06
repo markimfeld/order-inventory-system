@@ -1,0 +1,54 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+
+{% block breadcrumb-page %}
+    Categorias
+{% endblock %}
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Categorías
+{% endblock %}
+
+{% block columns %}
+    <th>Nombre</th>
+    <th class="text-center">Estado</th>
+    <th class="text-center" width="160px">Accion</th>
+{% endblock %}
+
+{% block rows %}
+{% for category in object_list %}
+    <tr>
+        <td>{{ category.name.upper }}</td>
+        {% if category.is_active %}
+        <td class="text-center"><div class="badge badge-success">Activado</div></td>
+        {% else %}
+        <td class="text-center"><div class="badge badge-danger">Desactivado</div></td>
+        {% endif %}
+        <td class="text-center">
+            <a class="btn btn-warning btn-flat btn-sm" href="{% url 'core:category-edit' category.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+            {% if category.is_active %}
+            <a class="btn btn-danger btn-flat btn-sm" href="{% url 'core:category-deactivate' category.pk %}">
+                <i class="fas fa-trash"></i>
+            </a>
+            {% else %}
+            <a class="btn btn-success btn-flat btn-sm" href="{% url 'core:category-activate' category.pk %}">
+                <i class="fas fa-check"></i>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block bottoms %}
+    <a class="btn btn-primary btn-flat" href="{% url 'core:category-add' %}">
+        <i class="fas fa-plus"></i> 
+        Nuevo registro
+    </a>
+{% endblock %}
+
+

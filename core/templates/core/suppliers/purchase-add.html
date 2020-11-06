@@ -1,0 +1,150 @@
+{% extends 'form.html' %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+
+{% block head %}
+ <!-- daterange picker -->
+ <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+<!-- Tempusdominus Bbootstrap 4 -->
+<link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+<!-- font-awesome 4 for clock  -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %} 
+
+{% block breadcrumb-page %}
+    Compras 
+{% endblock %}
+
+
+{% block title %}
+    Nuevo registro
+{% endblock %}
+
+{% block field %}
+{{ form.errors }}
+<div class="row">
+    <div class="form-group col-6"> 
+        <label for="supplier">Proveedor(*):</label> 
+        {{ form.supplier|add_class:'form-control select2bs4' }}
+    </div>
+    <!-- Date -->
+    <div class="form-group col-6">
+      <label>Fecha de compra(*):</label>
+        <div class="input-group date" id="purchasedate" data-target-input="nearest">
+            {{ form.purchased_at|add_class:'form-control datetimepicker-input'|attr:'data-target:purchasedate' }}
+            <div class="input-group-append" data-target="#purchasedate" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fas fa-calendar"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Añadir item:</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Cantidad</th>
+                        <th>Descripcion</th>
+                        <th>Costo Unidad</th>
+                        <th class="text-center">¿Borrar?</th>
+                    </tr>
+                </thead>
+                <tbody id="form_set">
+                    {{ items.management_form }}
+                        {% for form in items.forms %}
+                        <tr>
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            <td width="200px">{{ form.item|add_class:'form-control' }}</td>
+                            <td width="200px">{{ form.quantity|add_class:'form-control' }}</td>
+                            <td>{{ form.description|add_class:'form-control' }}</td>
+                            <td>{{ form.unit_cost|add_class:'form-control'|attr:'min:0' }}</td>
+                            <td class="text-center">{{ form.DELETE|add_class:'form-check-input' }}</td>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+                <tbody id="empty_form" style="display:none;">
+                    <tr>
+                        <td width="200px">{{ items.empty_form.item|add_class:'form-control' }}</td>
+                        <td width="200px">{{ items.empty_form.quantity|add_class:'form-control' }}</td>
+                        <td>{{ items.empty_form.description|add_class:'form-control' }}</td>
+                        <td>{{ items.empty_form.unit_cost|add_class:'form-control'|attr:'min:0' }}</td>
+                        {% if items.can_delete %}
+                            <td class="text-center">{{ items.empty_form.DELETE|add_class:'form-check-input' }}</td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+
+            <input id="add_more" class="btn btn-link" type="button" value="Añadir producto">
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+{% endblock %}
+
+{% block bottoms %}
+    <button type="submit" class="btn btn-primary btn-flat">
+        <i class="fas fa-save"></i>
+        Guardar registro
+    </button>
+    <a href="{% url 'core:purchases' %}" class="btn btn-danger btn-flat">
+        <i class="fas fa-times"></i>
+        Cancelar
+    </a>
+{% endblock %}
+
+
+
+{% block js %}
+<!-- InputMask -->
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
+<!-- date-range-picker -->
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
+
+
+<script>
+    $(document).ready(function(){
+
+
+        $('#add_more').click(function() {
+            const form_idx = $('#id_get_items-TOTAL_FORMS').val();
+            $('#form_set').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+            $('#id_get_items-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        });
+
+        $('#purchasedate').datetimepicker({
+            format: 'M/D/Y H:M:S',
+            defaultDate: new Date(),
+        });
+
+        //Initialize Select2 Elements
+        $('.select2bs4').select2({
+          theme: 'bootstrap4'
+        })
+
+    });
+</script>
+
+
+
+{% endblock %}

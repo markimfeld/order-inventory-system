@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+
+{% block title-page %}
+    
+{% endblock %}
+
+
+{% block main-content %}
+<!-- general form elements -->
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">
+            {% block title %}
+            {% endblock %}
+        </h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form role="form" method="post">
+        {% csrf_token %}
+        <div class="card-body">
+            {% block content-delete %}
+            {% endblock %}
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            {% block bottoms %}
+            {% endblock %}
+        </div>
+    </form>
+</div>
+<!-- /.card -->
+{% endblock %} 

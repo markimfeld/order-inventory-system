@@ -1,0 +1,66 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+
+{% block breadcrumb-page %}
+    Articulos
+{% endblock %}
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Artículos
+{% endblock %}
+
+{% block columns %}
+    <th>Nro</th>
+    <th>Nombre</th>
+    <th class="text-center">Stock</th>
+    <th class="text-center">Última Actualización</th>
+    <th class="text-center">Imágen</th>
+    <th class="text-center">Estado</th>
+    <th class="text-center" width="160px">Acción</th>
+{% endblock %}
+
+{% block rows %}
+{% for item in object_list %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name.upper }}</td>
+        {% if item.inventory > 0 %}
+            <td class="text-center"><div class="badge badge-success">{{ item.inventory }}</div></td>
+        {% else %}
+            <td class="text-center"><div class="badge badge-danger">{{ item.inventory }}</div></td>
+        {% endif %}
+        <td class="text-center">{{ item.updated_at }}</td>
+        <td class="text-center"><img src="{{ item.image.url }}" alt="" width="30px" height="30"></td>
+        {% if item.is_active %}
+        <td class="text-center"><div class="badge badge-success">Activado</div></td>
+        {% else %}
+        <td class="text-center"><div class="badge badge-danger">Desactivado</div></td>
+        {% endif %}
+        <td class="text-center">
+            <a class="btn btn-warning btn-flat btn-sm" href="{% url 'core:item-edit' item.pk %}">
+                <i class="fas fa-edit"></i>
+            </a>
+            {% if item.is_active %}
+            <a class="btn btn-danger btn-flat btn-sm" href="{% url 'core:item-deactivate' item.pk %}">
+                <i class="fas fa-trash"></i>
+            </a>
+            {% else %}
+            <a class="btn btn-success btn-flat btn-sm" href="{% url 'core:item-activate' item.pk %}">
+                <i class="fas fa-check"></i>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block bottoms %}
+    <a class="btn btn-primary btn-flat" href="{% url 'core:item-add' %}">
+        <i class="fas fa-plus"></i> 
+        Nuevo registro
+    </a>
+{% endblock %}
+
+

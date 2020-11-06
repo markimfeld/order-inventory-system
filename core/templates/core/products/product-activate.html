@@ -1,0 +1,31 @@
+{% extends 'delete.html' %}
+
+
+
+{% block breadcrumb-page %}
+    Productos 
+{% endblock %}
+
+
+
+{% block title %}
+    Activar Producto    
+{% endblock %}
+
+
+
+{% block content-delete %}
+    Estas seguro de activar el producto {{ product }}
+{% endblock %}
+
+
+{% block bottoms %}
+    <button type="submit" class="btn btn-primary btn-flat">
+        <i class="fas fa-save"></i>
+        Activar
+    </button>
+    <a href="{% url 'core:products' %}" class="btn btn-danger btn-flat">
+        <i class="fas fa-times"></i>
+        Cancelar
+    </a>
+{% endblock %}
