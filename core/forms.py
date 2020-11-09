@@ -109,6 +109,6 @@ class SaleItemForm(forms.ModelForm):
 
 SaleProductFormSet = inlineformset_factory (
     Sale, SaleItem, form=SaleItemForm,
-    extra=1,
+    extra=0,
     can_delete=True,
 )

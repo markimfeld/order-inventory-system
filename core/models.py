@@ -301,13 +301,18 @@ class Sale(models.Model):
         self.total = total['total']
         self.save()
 
-    def reset_stock(self):
+    def reset_stock(self, sale_item_):
+        if not sale_item_:
+            return False
         for sale_item in self.get_products.all():
-            sale_quantity = sale_item.quantity
-            for product_item in sale_item.product.get_items.all():
-                product_quantity = product_item.quantity
-                total_quantity = sale_quantity * product_quantity
-                product_item.item.increase_inventory(total_quantity)
+            if sale_item.id == sale_item_.id:
+                sale_quantity = sale_item.quantity
+                for product_item in sale_item.product.get_items.all():
+                    product_quantity = product_item.quantity
+                    total_quantity = sale_quantity * product_quantity
+                    product_item.item.increase_inventory(total_quantity)
+
+
         
 
     def __str__(self):

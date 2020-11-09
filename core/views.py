@@ -516,7 +516,12 @@ class SaleEditView(UpdateView):
 
         with transaction.atomic():
             if formset.is_valid():
-                # self.object.reset_stock()
+                # check if a form has changed
+                for f in formset:
+                    if f.has_changed():
+                        sale_item = f.cleaned_data['id']
+                        self.object.reset_stock(sale_item)
+
                 self.object = form.save()
                 formset.instance = self.object
 
