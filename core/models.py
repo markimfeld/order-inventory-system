@@ -334,7 +334,6 @@ class SaleItem(models.Model):
 
     def calculate_subtotal(self):
         self.subtotal = self.product.price * self.quantity
-        self.save()
 
     def __str__(self):
         return self.product.name

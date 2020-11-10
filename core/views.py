@@ -468,6 +468,8 @@ class SaleCreateView(CreateView):
 
                 total_quantity = 0
 
+                saved_products = []
+
                 for sale_item in products:
                     sale_item.calculate_subtotal()
                     sale_quantity = sale_item.quantity
@@ -480,7 +482,14 @@ class SaleCreateView(CreateView):
                             messages.add_message(self.request, messages.ERROR, message)
                             self.object.delete()
                             return self.render_to_response(self.get_context_data(form=form))
+                    # save the item
+                    saved_products.append(sale_item.save())
 
+                if len(saved_products) <= 0:
+                    message = f'Debes añadir algún producto'
+                    messages.add_message(self.request, messages.ERROR, message)
+                    self.object.delete()
+                    return self.render_to_response(self.get_context_data(form=form))
 
 
                 self.object.calculate_total()
@@ -516,21 +525,24 @@ class SaleEditView(UpdateView):
 
         with transaction.atomic():
             if formset.is_valid():
+                self.object = form.save()
                 # check if a form has changed
                 delete_fields = []
                 for f in formset:
                     if f.has_changed():
                         sale_item = f.cleaned_data['id']
                         self.object.reset_stock(sale_item)
-                        # if the delete field is true we add to delete_fields list
-                        if f.cleaned_data['DELETE']:
-                            delete_fields.append(f.cleaned_data['DELETE'])
+
+                    delete_fields.append(f.cleaned_data['DELETE'])
                 # if all delete fields are true we delete the sale
                 if all(delete_fields):
+                    object_id = self.object.id
                     self.object.delete()
+                    message = f'Venta #{object_id} eliminada!'
+                    messages.add_message(self.request, messages.SUCCESS, message)
                     return HttpResponseRedirect(self.get_success_url())
 
-                self.object = form.save()
+                # self.object = form.save()
                 formset.instance = self.object
 
                 # get all products from formset
@@ -545,9 +557,12 @@ class SaleEditView(UpdateView):
                         total_quantity = sale_quantity * product_quantity
                         product_item.item.decrease_inventory(total_quantity)
                 
-                formset.save()
+                ok = formset.save()
 
                 self.object.calculate_total()
+
+                message = f'Venta #{self.object.id} actualizada!'
+                messages.add_message(self.request, messages.SUCCESS, message)
 
                 return HttpResponseRedirect(self.get_success_url())
             else:
@@ -579,6 +594,9 @@ class SaleDeleteView(DeleteView):
                 product_quantity = product_item.quantity
                 total_quantity = sale_quantity * product_quantity
                 product_item.item.increase_inventory(total_quantity)
+
+        message = f'Venta #{self.object.id} eliminada!'
+        messages.add_message(self.request, messages.SUCCESS, message)
 
         return super(SaleDeleteView, self).delete(request)
 
