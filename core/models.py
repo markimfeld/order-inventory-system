@@ -99,6 +99,9 @@ class Product(models.Model):
     products_with_inventory = ProductWithInventoryManager()
 
 
+    def get_items_detail(self):
+        return [(p_item.item.name, p_item.quantity) for p_item in self.get_items.all()]
+
     def get_absolute_url(self):
         from django.urls import reverse
         return reverse('core:product-detail', args=[self.id])
@@ -296,6 +299,11 @@ class Sale(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     products = models.ManyToManyField(Product, through='SaleItem')
 
+    def get_total_items(self):
+        items = []
+        sale_products = self.get_products.all()
+        
+
     def calculate_total(self):
         total = self.get_products.aggregate(total=Sum('subtotal'))
         self.total = total['total']
@@ -311,8 +319,6 @@ class Sale(models.Model):
                     product_quantity = product_item.quantity
                     total_quantity = sale_quantity * product_quantity
                     product_item.item.increase_inventory(total_quantity)
-
-
         
 
     def __str__(self):

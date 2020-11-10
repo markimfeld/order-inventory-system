@@ -528,6 +528,7 @@ class SaleEditView(UpdateView):
                 # get all products from formset
                 products = formset.save(commit=False)
 
+
                 for sale_item in products:
                     sale_item.calculate_subtotal()
                     sale_quantity = sale_item.quantity
@@ -535,6 +536,8 @@ class SaleEditView(UpdateView):
                         product_quantity = product_item.quantity
                         total_quantity = sale_quantity * product_quantity
                         product_item.item.decrease_inventory(total_quantity)
+                
+                formset.save()
 
                 self.object.calculate_total()
 
