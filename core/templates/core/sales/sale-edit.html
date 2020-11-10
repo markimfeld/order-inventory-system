@@ -28,6 +28,15 @@
 
 {% block field %}
 
+<div class="row">
+    {% if messages %}
+        <div class="col">
+            {% for message in messages %}
+            <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 
 {{ form.errors }}
 <div class="row">

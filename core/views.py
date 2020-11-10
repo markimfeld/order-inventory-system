@@ -495,6 +495,10 @@ class SaleCreateView(CreateView):
                 self.object.calculate_total()
                 self.object.customer.increase_points(total_quantity)
 
+                date = self.object.created_at.strftime("%d-%m-%Y")
+                message = f'Venta Creada Exitosamente el {date}!'
+                messages.add_message(self.request, messages.SUCCESS, message)
+
                 return HttpResponseRedirect(self.get_success_url())
             else:
                 return self.render_to_response(self.get_context_data(form=form))
@@ -555,7 +559,11 @@ class SaleEditView(UpdateView):
                     for product_item in sale_item.product.get_items.all():
                         product_quantity = product_item.quantity
                         total_quantity = sale_quantity * product_quantity
-                        product_item.item.decrease_inventory(total_quantity)
+                        ok = product_item.item.decrease_inventory(total_quantity)
+                        if not ok:
+                            message = f'El Stock no alcanza: hay ({product_item.item.inventory}) {product_item.item.name} disponibles'
+                            messages.add_message(self.request, messages.ERROR, message)
+                            return self.render_to_response(self.get_context_data(form=form))
                 
                 ok = formset.save()
 
