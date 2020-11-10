@@ -40,6 +40,7 @@ from core.forms import (
 
 
 
+
 # Create your views here.
 class DashBoard(TemplateView):
     template_name = 'core/index.html'
@@ -627,12 +628,24 @@ class CustomerCreateView(CreateView):
     template_name = 'core/customers/customer-add.html'
     success_url = reverse_lazy('core:customers')
 
+    def form_valid(self, form):
+        super(CustomerCreateView, self).form_valid(form)
+        message = f'{self.object.first_name} {self.object.last_name} fue creado exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class CustomerEditView(UpdateView):
     model = Customer
     fields = ('first_name', 'last_name', 'address', )
     template_name = 'core/customers/customer-edit.html'
     success_url = reverse_lazy('core:customers')
+
+    def form_valid(self, form):
+        super(CustomerEditView, self).form_valid(form)
+        message = f'{self.object.first_name} {self.object.last_name} fue actualizado exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class CustomerDeactivateView(TemplateView):
@@ -649,6 +662,9 @@ class CustomerDeactivateView(TemplateView):
         customer = Customer.objects.get(pk=customer_pk)
         if customer is not None:
             customer.deactivate()
+
+            message = f'{customer.first_name} {customer.last_name} fue desactivado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:customers'))
 
@@ -667,5 +683,8 @@ class CustomerActivateView(TemplateView):
         customer = Customer.objects.get(pk=customer_pk)
         if customer is not None:
             customer.activate()
+
+            message = f'{customer.first_name} {customer.last_name} fue activado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:customers'))
