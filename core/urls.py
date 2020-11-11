@@ -28,6 +28,7 @@ from core.views import (
     SupplierDeactivateView,
     # PURCHASE
     PurchaseView,
+    PurchaseDetailView,
     PurchaseCreateView,
     PurchaseEditView,
     PurchaseDeleteView,
@@ -80,6 +81,7 @@ urlpatterns = [
     path('purchases/', PurchaseView.as_view(), name='purchases'),
     path('purchases/add/', PurchaseCreateView.as_view(), name='purchase-add'),
     path('purchases/edit/<int:pk>/', PurchaseEditView.as_view(), name='purchase-edit'),
+    path('purchases/detail/<int:pk>/', PurchaseDetailView.as_view(), name='purchase-detail'),
     path('purchases/delete/<int:pk>/', PurchaseDeleteView.as_view(), name='purchase-delete'),
     # SALES
     path('sales/', SaleView.as_view(), name='sales'),

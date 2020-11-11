@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+
+
+{% block main-content %}
+
+<div class="row">
+    <div class="col-7">
+        <div class="card">
+
+            <div class="card-header">
+                <h2 class="card-title">Detalle: <b>{{ object }}</b></h2>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    {% for item in object.get_items.all %}
+                        <div class="col-12 col-sm-6">
+                            <div class="info-box bg-light">
+                                <div class="info-box-content">
+                                    <span class="info-box-text text-center text-muted">{{ item }}</span>
+                                    <span class="info-box-number text-center text-muted mb-0">{{ item.quantity }}</span>
+                                </div>
+                            </div>
+                        </div>
+                {% endfor %}
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <a href="{% url 'core:purchases' %}" class="btn btn-danger btn-flat d-block d-sm-inline">
+                    <i class="fas fa-times"></i>
+                    Volver
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-5">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Detalle de la boleta</h3>
+            </div>
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Artículo</th>
+                            <th style="width: 40px">Cantidad</th>
+                            <th class="text-center" style="width: 40px">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object.get_items.all %}
+                        <tr>
+                            <td>{{ item }}</td>
+                            <td class="text-center"><span class="badge bg-info">{{ item.quantity }}</span></td>
+                            <td class="text-right">${{ item.subtotal }}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><b>Total</b></td>
+                            <td></td>
+                            <td class="text-center"><b>${{ object.total }}</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

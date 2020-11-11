@@ -57,12 +57,24 @@ class ItemCreateView(CreateView):
     template_name = 'core/products/item-add.html'
     success_url = reverse_lazy('core:items')
 
+    def form_valid(self, form):
+        super(ItemCreateView, self).form_valid(form)
+        message = f'El artículo {self.object.name} fue creado exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class ItemEditView(UpdateView):
     model = Item
     fields = ('name', 'description', 'image')
     template_name = 'core/products/item-edit.html'
     success_url = reverse_lazy('core:items')
+
+    def form_valid(self, form):
+        super(ItemEditView, self).form_valid(form)
+        message = f'El artículo {self.object.name} fue actualizado exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ItemDeactivateView(TemplateView):
@@ -79,6 +91,8 @@ class ItemDeactivateView(TemplateView):
         item = Item.objects.get(pk=item_pk)
         if item is not None:
             item.deactivate()
+            message = f'El artículo "{item.name}" fue desactivado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:items'))
 
@@ -97,6 +111,8 @@ class ItemActivateView(TemplateView):
         item = Item.objects.get(pk=item_pk)
         if item is not None:
             item.activate()
+            message = f'El artículo "{item.name}" fue activado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:items'))
 
@@ -113,6 +129,11 @@ class CategoryCreateView(CreateView):
     template_name = 'core/products/category-add.html'
     success_url = reverse_lazy('core:categories')
 
+    def form_valid(self, form):
+        super(CategoryCreateView, self).form_valid(form)
+        message = f'La categoría {self.object.name} fue creada exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
 
 class CategoryEditView(UpdateView):
     model = Category
@@ -120,6 +141,11 @@ class CategoryEditView(UpdateView):
     template_name = 'core/products/category-edit.html'
     success_url = reverse_lazy('core:categories')
 
+    def form_valid(self, form):
+        super(CategoryEditView, self).form_valid(form)
+        message = f'La categoría {self.object.name} fue actualizada exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
 
 class CategoryDeactivateView(TemplateView):
     template_name = 'core/products/category-deactivate.html'
@@ -135,6 +161,8 @@ class CategoryDeactivateView(TemplateView):
         category = Category.objects.get(pk=category_pk)
         if category is not None:
             category.deactivate()
+            message = f'La categoria "{category.name}" fue desactivada exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:categories'))
 
@@ -153,6 +181,8 @@ class CategoryActivateView(TemplateView):
         category = Category.objects.get(pk=category_pk)
         if category is not None:
             category.activate()
+            message = f'La categoria "{category.name}" fue activada exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:categories'))
 
@@ -187,6 +217,8 @@ class ProductCreateView(CreateView):
                 self.object = form.save()
                 items.instance = self.object
                 items.save()
+                message = f'El producto {self.object.name} fue creado exitosamente!'
+                messages.add_message(self.request, messages.SUCCESS, message)
                 return HttpResponseRedirect(self.get_success_url())
             else:
                 return self.render_to_response(self.get_context_data(form=form))
@@ -225,6 +257,8 @@ class ProductEditView(UpdateView):
                 self.object = form.save()
                 items.instance = self.object
                 items.save()
+                message = f'El producto {self.object.name} fue actualizado exitosamente!'
+                messages.add_message(self.request, messages.SUCCESS, message)
                 return HttpResponseRedirect(self.get_success_url())
             else:
                 return self.render_to_response(self.get_context_data(form=form))
@@ -251,6 +285,8 @@ class ProductDeactivateView(TemplateView):
         product = Product.objects.get(pk=product_pk)
         if product is not None:
             product.deactivate()
+            message = f'El producto {product.name} fue desactivado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:products'))
 
@@ -269,6 +305,8 @@ class ProductActivateView(TemplateView):
         product = Product.objects.get(pk=product_pk)
         if product is not None:
             product.activate()
+            message = f'El producto {product.name} fue activado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:products'))
 
@@ -285,12 +323,24 @@ class SupplierCreateView(CreateView):
     template_name = 'core/suppliers/supplier-add.html'
     success_url = reverse_lazy('core:suppliers')
 
+    def form_valid(self, form):
+        super(SupplierCreateView, self).form_valid(form)
+        message = f'El proveedor {self.object.name} fue creado exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class SupplierEditView(UpdateView):
     model = Supplier
     fields = ('name', 'phone', 'address', )
     template_name = 'core/suppliers/supplier-edit.html'
     success_url = reverse_lazy('core:suppliers')
+
+    def form_valid(self, form):
+        super(SupplierEditView, self).form_valid(form)
+        message = f'El proveedor {self.object.name} fue actualizado exitosamente!'
+        messages.add_message(self.request, messages.SUCCESS, message)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class SupplierDeactivateView(TemplateView):
@@ -307,6 +357,8 @@ class SupplierDeactivateView(TemplateView):
         supplier = Supplier.objects.get(pk=supplier_pk)
         if supplier is not None:
             supplier.deactivate()
+            message = f'El proveedor {supplier.name} fue desactivado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:suppliers'))
 
@@ -325,6 +377,8 @@ class SupplierActivateView(TemplateView):
         supplier = Supplier.objects.get(pk=supplier_pk)
         if supplier is not None:
             supplier.activate()
+            message = f'El proveedor {supplier.name} fue activado exitosamente!'
+            messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:suppliers'))
 
@@ -333,6 +387,12 @@ class SupplierActivateView(TemplateView):
 class PurchaseView(ListView):
     model = Purchase
     template_name = 'core/suppliers/purchases.html'
+
+
+class PurchaseDetailView(DetailView):
+    model = Purchase
+    template_name = 'core/suppliers/purchase-detail.html'
+    success_url = reverse_lazy('core:suppliers')
 
 
 class PurchaseCreateView(CreateView):
@@ -368,6 +428,10 @@ class PurchaseCreateView(CreateView):
                     it.item.increase_inventory(quantity)
 
                 self.object.calculate_total()
+
+                date = self.object.created_at.strftime("%d-%m-%Y")
+                message = f'Compra Creada Exitosamente el {date}!'
+                messages.add_message(self.request, messages.SUCCESS, message)
 
                 return HttpResponseRedirect(self.get_success_url())
             else:
@@ -422,11 +486,15 @@ class PurchaseDeleteView(DeleteView):
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
+        item = self.object
         items = self.object.get_items.all()
 
         for it in items:
             quantity = it.quantity
             it.item.decrease_inventory(quantity)
+
+        message = f'Compra #{item.id} eliminada!'
+        messages.add_message(self.request, messages.SUCCESS, message)
 
         return super(PurchaseDeleteView, self).delete(request)
 
