@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.contrib import messages
 
 from django.db import transaction
@@ -44,6 +45,14 @@ from core.forms import (
 # Create your views here.
 class DashBoard(TemplateView):
     template_name = 'core/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sales_to_prepare'] = Sale.objects.filter(status__name__exact='Preparar')
+        context['sales'] = Sale.objects.filter(status__name__exact='Pagado')
+        context['revenue'] = Sale.objects.filter(status__name__exact='Pagado').aggregate(Sum('total'))
+        context['customers'] = Customer.objects.all().count()
+        return context
 
 # ITEMS
 class ItemView(ListView):
