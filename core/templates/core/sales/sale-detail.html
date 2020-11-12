@@ -4,17 +4,24 @@
 {% block main-content %}
 
 <div class="row">
-    <div class="col-7">
+    <div class="col">
         <div class="card">
-
             <div class="card-header">
-                <h2 class="card-title">Detalle: <b>{{ object }}</b></h2>
+                <div class="row">
+                    <div class="col">
+                        <p class="p-0 m-0"><b>Cliente:</b> {{ object.customer.full_name }}</p>
+                        <p class="p-0 m-0"><b>Total:</b> ${{ object.total }}</p>
+                    </div>
+                    <div class="col">
+                        <p class="text-right">Fecha de Registro: <b>{{ object.created_at|date:"d/m/Y" }}</b></p>
+                    </div>
+                </div>
             </div>
 
             <div class="card-body">
                 <div class="row">
                     {% for product in object.get_products.all %}
-                        <div class="col-12 col-sm-6">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <div class="info-box bg-light">
                                 <div class="info-box-content">
                                     <span class="info-box-text text-center text-muted">{{ product }}</span>
@@ -38,7 +45,7 @@
             </div>
         </div>
     </div>
-    <div class="col-5">
+    <div class="col col-sm-4">
         <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Productos a entregar</h3>
@@ -64,5 +71,6 @@
         </div>
     </div>
 </div>
+
 
 {% endblock %}
