@@ -664,6 +664,11 @@ class SaleDetailView(DetailView):
     template_name = 'core/sales/sale-detail.html'
     success_url = reverse_lazy('core:sales')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['products_quantities'] = self.object.calculate_products_quantities()
+        return context
+
 
 class SaleDeleteView(DeleteView):
     model = Sale

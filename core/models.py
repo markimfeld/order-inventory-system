@@ -299,10 +299,22 @@ class Sale(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     products = models.ManyToManyField(Product, through='SaleItem')
 
-    def get_total_items(self):
-        items = []
-        sale_products = self.get_products.all()
+    def calculate_products_quantities(self):
+        items= Item.objects.all()
+
+        items_quantities = [{'name': item.name, 'quantity': 0} for item in items]
+        for sale_detail in self.get_products.all():
+            for product_item in sale_detail.product.get_items.all():
+                for product_quantity in items_quantities:
+                    if product_quantity.get('name') == product_item.item.name:
+                        product_quantity.update(
+                            {
+                                'name': product_item.item.name,
+                                'quantity': product_quantity.get('quantity') + (product_item.quantity * sale_detail.quantity)
+                            }
+                        )
         
+        return items_quantities
 
     def calculate_total(self):
         total = self.get_products.aggregate(total=Sum('subtotal'))

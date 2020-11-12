@@ -52,22 +52,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Empanadas</td>
-                      <td class="text-center"><span class="badge bg-info">8</span></td>
-                    </tr>
-                    <tr>
-                      <td>Pascualinas</td>
-                      <td class="text-center"><span class="badge bg-info">1</span></td>
-                    </tr>
-                    <tr>
-                      <td>Ravioles</td>
-                      <td class="text-center"><span class="badge bg-info">1</span></td>
-                    </tr>
-                    <tr>
-                      <td>Fideos</td>
-                      <td class="text-center"><span class="badge bg-info">0</span></td>
-                    </tr>
+                    {% for item in products_quantities %}
+                      <tr>
+                          <td>{{ item.name }}</td>
+                          <td class="text-center"><span class="badge bg-info">{{ item.quantity }}</span></td>
+                      </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
             </div>
