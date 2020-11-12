@@ -1,4 +1,5 @@
-from django.db.models import Sum
+from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 from django.contrib import messages
 
 from django.db import transaction
@@ -50,7 +51,7 @@ class DashBoard(TemplateView):
         context = super().get_context_data(**kwargs)
         context['sales_to_prepare'] = Sale.objects.filter(status__name__exact='Preparar')
         context['sales'] = Sale.objects.filter(status__name__exact='Pagado')
-        context['revenue'] = Sale.objects.filter(status__name__exact='Pagado').aggregate(Sum('total'))
+        context['revenue'] = Sale.objects.filter(status__name__exact='Pagado').aggregate(value=Coalesce(Sum('total'), Value(0)))
         context['customers'] = Customer.objects.all().count()
         return context
 

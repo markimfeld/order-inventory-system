@@ -100,7 +100,8 @@ class SaleItemForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(SaleItemForm, self).__init__(*args, **kwargs)
 
-        self.fields['product'].choices = Product.products_with_inventory.all()
+        products = Product.products_with_inventory.all()
+        self.fields['product'].choices = products
 
     class Meta:
         model = SaleItem
