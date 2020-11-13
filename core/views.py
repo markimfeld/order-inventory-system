@@ -783,7 +783,7 @@ def get_most_sold_products(request):
 
     labels = [item['product__name'] for item in most_sold_products]
     data = [item['total_sales'] for item in most_sold_products]
-    backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#2D5DEB']
+    backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB','#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB']
     donutData = {
         'labels': labels,
         'datasets': [
@@ -795,3 +795,8 @@ def get_most_sold_products(request):
     }
 
     return JsonResponse(donutData)
+
+
+class SalesReportView(ListView):
+    model = Sale
+    template_name = 'core/reports/sales-report.html'

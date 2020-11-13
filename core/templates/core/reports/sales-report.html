@@ -1,0 +1,57 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+{% block breadcrumb-page %}
+    Reporte de Ventas
+{% endblock %}
+
+{% block messages %}
+    <div class="row">
+        {% if messages %}
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong> 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Ventas
+{% endblock %}
+
+{% block columns %}
+    <th width="90px">Nro</th>
+    <th>Cliente</th>
+    <th class="text-center">Cantidad</th>
+    <th>Fecha de registro</th>
+    <th class="text-center">Total</th>
+{% endblock %}
+
+{% block rows %}
+{% for sale in object_list %}
+    <tr>
+        <td>{{ sale.id }}</td>
+        <td>{{ sale.customer.full_name.upper }}</td>
+        <td class="text-center">{{ sale.get_products_quantity }}</td>
+        <td>{{ sale.created_at }}</td>
+        <td class="text-center">${{ sale.total }}</td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+
+{% block extra-js %}
+<script>
+    $(document).ready(function {
+        $('.alert').alert('close');
+    });
+</script>
+{% endblock extra-js %}

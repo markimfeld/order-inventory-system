@@ -144,3 +144,5 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 MEDIA_URL = '/media/'
 
 DATE_INPUT_FORMATS = ['%m/%d/%Y %H:%M:%S']
+
+LOGIN_URL = '/users/login/'
