@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+
 from django.db.models import Sum, Value
 from django.db.models.functions import Coalesce
 from django.contrib import messages
@@ -39,6 +41,8 @@ from core.forms import (
     SaleItemForm,
     SaleProductFormSet
 )
+
+User = get_user_model()
 
 
 
@@ -800,3 +804,17 @@ def get_most_sold_products(request):
 class SalesReportView(ListView):
     model = Sale
     template_name = 'core/reports/sales-report.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(SalesReportView, self).get_context_data(**kwargs)
+        
+        context['weekly_total'] = Sale.objects.aggregate(sales=Sum('total'))['sales']
+        context['products_sold_total'] = Sale.objects.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Sum('quantity'))['quantities']
+
+        return context
+
+
+# ACCOUNTS
+class UserView(ListView):
+    model = User
+    template_name = 'core/users/employees.html'

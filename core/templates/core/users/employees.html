@@ -1,0 +1,86 @@
+{% extends 'list.html' %}
+
+{% load static %}
+
+
+{% block breadcrumb-page %}
+    Empleados
+{% endblock %}
+
+{% block messages %}
+    <div class="row">
+        {% if messages %}
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong> 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block title %}
+    <i class="fas fa-search"></i> Lista de Empleados
+{% endblock %}
+
+{% block columns %}
+    <th>Usuario</th>
+    <th>Nombre</th>
+    <th>Fecha de Alta</th>
+    <th>Email</th>
+    <th>Es Staff</th>
+    <th>Estado</th>
+    <th class="text-center" width="200px">Acción</th>
+{% endblock %}
+
+{% block rows %}
+{% for employee in object_list %}
+    <tr>
+        <td>{{ employee.username }}</td>
+        <td>{{ employee.first_name.upper }} {{ employee.last_name.upper }}</td>
+        <td>{{ employee.date_joined }}</td>
+        <td>{{ employee.email }}</td>
+        {% if employee.is_staff %}
+        <td><div class="badge badge-success"><i class="fas fa-check"></i></div></td>
+        {% else %}
+        <td><div class="badge badge-danger"><i class="fas fa-minus"></i></div></td>
+        {% endif %}
+        {% if employee.is_active %}
+        <td><div class="badge badge-success">Activado</div></td>
+        {% else %}
+        <td><div class="badge badge-danger">Desactivado</div></td>
+        {% endif %}
+        <td class="text-center">
+            <a class="btn btn-primary btn-flat btn-sm" href="#">
+                <i class="fas fa-eye"></i>
+            </a>
+            <a class="btn btn-warning btn-flat btn-sm" href="#">
+                <i class="fas fa-edit"></i>
+            </a>
+            {% if employee.is_active %}
+            <a class="btn btn-danger btn-flat btn-sm" href="#">
+                <i class="fas fa-trash"></i>
+            </a>
+            {% else %}
+            <a class="btn btn-success btn-flat btn-sm" href="#">
+                <i class="fas fa-check"></i>
+            </a>
+            {% endif %}
+        </td>
+    </tr>
+{% endfor %}
+{% endblock %}
+
+{% block bottoms %}
+    <a class="btn btn-primary btn-flat" href="#">
+        <i class="fas fa-plus"></i> 
+        Nuevo registro
+    </a>
+{% endblock %}
+
+

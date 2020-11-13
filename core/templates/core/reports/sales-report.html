@@ -30,21 +30,36 @@
 {% block columns %}
     <th width="90px">Nro</th>
     <th>Cliente</th>
-    <th class="text-center">Cantidad</th>
+    <th>Ciudad</th>
     <th>Fecha de registro</th>
+    <th class="text-center">Cantidad</th>
     <th class="text-center">Total</th>
 {% endblock %}
 
 {% block rows %}
-{% for sale in object_list %}
+
+    {% for sale in object_list %}
+        <tr>
+            <td>{{ sale.id }}</td>
+            <td>{{ sale.customer.full_name.upper }}</td>
+            <td>{{ sale.customer.address.city.name.upper }}</td>
+            <td>{{ sale.created_at }}</td>
+            <td class="text-center">{{ sale.get_products_quantity }}</td>
+            <td class="text-center">${{ sale.total }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+
+{% block tfoot %}
     <tr>
-        <td>{{ sale.id }}</td>
-        <td>{{ sale.customer.full_name.upper }}</td>
-        <td class="text-center">{{ sale.get_products_quantity }}</td>
-        <td>{{ sale.created_at }}</td>
-        <td class="text-center">${{ sale.total }}</td>
+        <td style="border-top: 3px solid #CCC;"></td>
+        <td style="border-top: 3px solid #CCC;"></td>
+        <td style="border-top: 3px solid #CCC;"></td>
+        <th style="border-top: 3px solid #CCC;" class="text-right h5">Total</th>
+        <th style="border-top: 3px solid #CCC;" class="text-center h5">{{ products_sold_total }}</th>
+        <th style="border-top: 3px solid #CCC;" class="text-center h5">${{ weekly_total }}</th>
     </tr>
-{% endfor %}
 {% endblock %}
 
 
