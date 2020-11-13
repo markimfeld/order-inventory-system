@@ -1,8 +1,13 @@
 from django.urls import path
 
-from core.views import DashBoard
+from core.views import (
+    # REPORTS
+    get_turnover
+)
 
 from core.views import (
+    # DASHBOARD
+    DashBoard,
     # ITEM
     ItemView, 
     ItemCreateView, 
@@ -96,6 +101,6 @@ urlpatterns = [
     path('customers/detail/<int:pk>/', CustomerDetailView.as_view(), name='customer-detail'),
     path('customers/deactivate/<int:pk>/', CustomerDeactivateView.as_view(), name='customer-deactivate'),
     path('customers/activate/<int:pk>/', CustomerActivateView.as_view(), name='customer-activate'),
-
-
+    # REPORTS
+    path('reports/turnover/', get_turnover, name='get-turnover'),
 ]

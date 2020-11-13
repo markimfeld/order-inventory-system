@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from django.db import transaction
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 
 from django.shortcuts import render, reverse 
 from django.views.generic import TemplateView
@@ -53,6 +53,7 @@ class DashBoard(TemplateView):
         context['sales'] = Sale.objects.filter(status__name__exact='Pagado')
         context['revenue'] = Sale.objects.filter(status__name__exact='Pagado').aggregate(value=Coalesce(Sum('total'), Value(0)))
         context['customers'] = Customer.objects.all().count()
+        context['items'] = Item.objects.all()
         return context
 
 # ITEMS
@@ -771,3 +772,26 @@ class CustomerActivateView(TemplateView):
             messages.add_message(self.request, messages.SUCCESS, message)
         
         return HttpResponseRedirect(reverse('core:customers'))
+
+
+# API DATA FOR CHARTS
+def get_turnover(request):
+
+    sale_items = SaleItem.objects.all().select_related('product', 'sale')
+
+    most_selled_combos = sale_items.exclude(product__category__name__exact='combo').values('product__name', 'product__price').annotate(total_sales=Coalesce(Sum('quantity'), Value(0))).order_by('-total_sales')
+
+    labels = [item['product__name'] for item in most_selled_combos]
+    data = [item['total_sales'] for item in most_selled_combos]
+    backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#2D5DEB']
+    donutData = {
+        'labels': labels,
+        'datasets': [
+            {
+                'data': data
+            },
+        ],
+        'backgroundColor': backgroundColor
+    }
+
+    return JsonResponse(donutData)

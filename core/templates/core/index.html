@@ -1,5 +1,7 @@
 {% extends 'layout.html' %}
 
+{% load static %}
+
 {% block head %}
  <!-- Ionicons -->
 <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -10,68 +12,175 @@
 {% endblock %}
 
 {% block main-content %}
-<!-- Small boxes (Stat box) -->
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                  <h3>{{ sales_to_prepare.count }}</h3>
+
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>{{ sales_to_prepare.count }}</h3>
 
                 <p>Nuevos Pedidos</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-bag"></i>
-              </div>
-              <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
             </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                  <h3>${{ revenue.value }}</h3>
+            <div class="icon">
+                <i class="ion ion-bag"></i>
+            </div>
+            <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>${{ revenue.value }}</h3>
 
                 <p>Facturación</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
             </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                  <h3>{{ customers }}</h3>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>{{ customers }}</h3>
 
                 <p>Clientes</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-person-add"></i>
-              </div>
-              <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
             </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small box -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                  <h3>{{ sales.count }}</h3>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>{{ sales.count }}</h3>
 
                 <p>Ventas</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-pie-graph"></i>
-              </div>
-              <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
             </div>
-          </div>
-          <!-- ./col -->
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
         </div>
-        <!-- /.row -->
+    </div>
+    <!-- ./col -->
+</div>
+<!-- /.row -->
+
+
+<div class="row">
+    <div class="col col-sm-8">
+         <!-- BAR CHART -->
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Ventas Semanales</h3>
+
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                    <canvas data-url="{% url 'core:get-turnover' %}" id="barChart" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 100%;"></canvas>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+    </div>
+    <div class="col col-sm-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-boxes mr-1"></i> 
+                    Inventario
+                </h3>
+            </div>
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Artículo</th>
+                            <th style="width: 40px">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                {% if item.inventory > 0 %}
+                                <td class="text-center"><span class="badge bg-info">{{ item.inventory }}</span></td>
+                                {% else %}
+                                <td class="text-center"><span class="badge bg-danger">{{ item.inventory }}</span></td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<!-- ChartJS -->
+<script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+
+<script>
+    const urlData = $('#barChart').data('url');
+
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    const pieChartCanvas = $('#barChart').get(0).getContext('2d')
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    const pieChart = new Chart(pieChartCanvas, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+                backgroundColor: '',
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                    }
+                }]
+            }
+        }
+    })
+    
+    $.ajax({
+        url: urlData,
+        method: 'GET',
+        success: data => {
+            labels = data.labels;
+            datasets = [{
+                label: 'Productos más vendidos',
+                data: data.datasets[0].data,
+                backgroundColor: data.backgroundColor
+            }]
+            pieChart.data.labels = labels;
+            pieChart.data.datasets = datasets;
+            pieChart.update();
+        }
+    })
+</script>
+
 {% endblock %}
