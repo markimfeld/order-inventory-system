@@ -2,7 +2,7 @@ from django.urls import path
 
 from core.views import (
     # REPORTS
-    get_turnover
+    get_most_sold_products
 )
 
 from core.views import (
@@ -102,5 +102,5 @@ urlpatterns = [
     path('customers/deactivate/<int:pk>/', CustomerDeactivateView.as_view(), name='customer-deactivate'),
     path('customers/activate/<int:pk>/', CustomerActivateView.as_view(), name='customer-activate'),
     # REPORTS
-    path('reports/turnover/', get_turnover, name='get-turnover'),
+    path('reports/most-sold-products/', get_most_sold_products, name='get-most-sold-products'),
 ]
