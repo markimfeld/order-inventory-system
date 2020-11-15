@@ -301,8 +301,7 @@ class Sale(models.Model):
     products = models.ManyToManyField(Product, through='SaleItem')
 
     def get_products_quantity(self):
-        quantity = self.get_products.aggregate(total=Sum('quantity'))
-        return quantity['total']
+        return self.get_products.aggregate(total=Sum('quantity'))['total']
 
     def calculate_products_quantities(self):
         items= Item.objects.all()
@@ -321,10 +320,9 @@ class Sale(models.Model):
         
         return items_quantities
 
-    def calculate_total(self):
-        total = self.get_products.aggregate(total=Sum('subtotal'))
-        self.total = total['total']
-        self.save()
+    def get_sale_total(self):
+        total = self.get_products.aggregate(total=Sum('subtotal'))['total']
+        return total
 
     def reset_stock(self, sale_item_):
         if not sale_item_:
@@ -349,8 +347,8 @@ class SaleItem(models.Model):
     description = models.CharField(max_length=120, blank=True, null=True)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
 
-    def calculate_subtotal(self):
-        self.subtotal = self.product.price * self.quantity
+    def get_subtotal(self):
+        return self.product.price * self.quantity
 
     def __str__(self):
         return self.product.name
