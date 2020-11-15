@@ -255,6 +255,7 @@ class Customer(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
 
