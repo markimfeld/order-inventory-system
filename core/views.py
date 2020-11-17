@@ -555,7 +555,7 @@ class SaleCreateView(CreateView):
                 saved_products = []
 
                 for sale_item in products:
-                    sale_item.calculate_subtotal()
+                    sale_item.subtotal = sale_item.get_subtotal()
                     sale_quantity = sale_item.quantity
                     for product_item in sale_item.product.get_items.all():
                         product_quantity = product_item.quantity
@@ -576,7 +576,8 @@ class SaleCreateView(CreateView):
                     return self.render_to_response(self.get_context_data(form=form))
 
 
-                self.object.calculate_total()
+                self.object.total = self.object.get_sale_total()
+                self.object.save()
                 self.object.customer.increase_points(total_quantity)
 
                 date = self.object.created_at.strftime("%d-%m-%Y")
@@ -638,7 +639,7 @@ class SaleEditView(UpdateView):
 
 
                 for sale_item in products:
-                    sale_item.calculate_subtotal()
+                    sale_item.subtotal = sale_item.get_subtotal()
                     sale_quantity = sale_item.quantity
                     for product_item in sale_item.product.get_items.all():
                         product_quantity = product_item.quantity
@@ -648,10 +649,13 @@ class SaleEditView(UpdateView):
                             message = f'El Stock no alcanza: hay ({product_item.item.inventory}) {product_item.item.name} disponibles'
                             messages.add_message(self.request, messages.ERROR, message)
                             return self.render_to_response(self.get_context_data(form=form))
+                    # save item
+                    sale_item.save()
                 
                 ok = formset.save()
 
-                self.object.calculate_total()
+                self.object.total = self.object.get_sale_total()
+                self.object.save()
 
                 message = f'Venta #{self.object.id} actualizada!'
                 messages.add_message(self.request, messages.SUCCESS, message)
@@ -808,8 +812,8 @@ class SalesReportView(ListView):
     def get_context_data(self, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
         
-        context['weekly_total'] = Sale.objects.aggregate(sales=Sum('total'))['sales']
-        context['products_sold_total'] = Sale.objects.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Sum('quantity'))['quantities']
+        context['weekly_total'] = Sale.objects.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
+        context['products_sold_total'] = Sale.objects.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities']
 
         return context
 
