@@ -787,7 +787,7 @@ def get_most_sold_products(request):
 
     sale_items = SaleItem.objects.all().select_related('product', 'sale')
 
-    most_sold_products= sale_items.values('product__name').annotate(total_sales=Coalesce(Sum('product__get_items__quantity'), Value(0))).order_by('-total_sales')
+    most_sold_products= sale_items.values('product__name').annotate(total_sales=Coalesce(Sum('quantity'), Value(0))).order_by('-total_sales')
 
 
     labels = [item['product__name'] for item in most_sold_products]
