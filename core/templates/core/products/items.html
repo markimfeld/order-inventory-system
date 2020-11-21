@@ -31,6 +31,7 @@
 {% block columns %}
     <th>Nro</th>
     <th>Nombre</th>
+    <th class="text-center">Costo</th>
     <th class="text-center">Stock</th>
     <th class="text-center">Última Actualización</th>
     <th class="text-center">Imágen</th>
@@ -43,6 +44,7 @@
     <tr>
         <td>{{ item.id }}</td>
         <td>{{ item.name.upper }}</td>
+        <td class="text-center">${{ item.cost }}</td>
         {% if item.inventory > 0 %}
             <td class="text-center"><div class="badge badge-success">{{ item.inventory }}</div></td>
         {% else %}

@@ -68,7 +68,7 @@ class ItemView(ListView):
 
 class ItemCreateView(CreateView):
     model = Item
-    fields = ('name', 'description', 'image')
+    fields = ('name', 'cost', 'description', 'image')
     template_name = 'core/products/item-add.html'
     success_url = reverse_lazy('core:items')
 
@@ -81,7 +81,7 @@ class ItemCreateView(CreateView):
 
 class ItemEditView(UpdateView):
     model = Item
-    fields = ('name', 'description', 'image')
+    fields = ('name', 'cost', 'description', 'image')
     template_name = 'core/products/item-edit.html'
     success_url = reverse_lazy('core:items')
 

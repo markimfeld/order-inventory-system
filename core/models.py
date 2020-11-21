@@ -27,6 +27,7 @@ class Category(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=64)
+    cost = models.DecimalField(max_digits=8, decimal_places=2)
     description = models.CharField(max_length=120, blank=True, null=True)
     inventory = models.PositiveSmallIntegerField(default=0)
     image = models.ImageField(upload_to='media/products/', default='empty.png')
@@ -86,6 +87,7 @@ class ProductWithInventoryManager(models.Manager):
 class Product(models.Model):
     name = models.CharField(max_length=64)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    cost = models.DecimalField(max_digits=8, decimal_places=2)
     image = models.ImageField(upload_to='media/products/', default='empty.png')
     description = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
