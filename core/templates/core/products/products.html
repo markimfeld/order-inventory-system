@@ -33,6 +33,7 @@
     <th class="text-center">Categoria</th>
     <th class="text-center">Precio de Costo</th>
     <th class="text-center">Precio de Venta</th>
+    <th class="text-center">Ganancia</th>
     <th class="text-center">Última actualización</th>
     <th class="text-center">Imágen</th>
     <th class="text-center">Estado</th>
@@ -45,6 +46,7 @@
         <td class="text-center">{{ product.category.name.upper }}</td>
         <td class="text-center">${{ product.cost }}</td>
         <td class="text-center">${{ product.price }}</td>
+        <td class="text-center">${{ product.get_revenue }}</td>
         <td class="text-center">{{ product.updated_at }}</td>
         <td class="text-center"><img src="{{ product.image.url }}" alt="" width="30px" height="30px"></td>
         {% if product.is_active %}

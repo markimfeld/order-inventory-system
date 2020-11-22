@@ -100,6 +100,9 @@ class Product(models.Model):
     active_products = ProductActiveManager()
     products_with_inventory = ProductWithInventoryManager()
 
+    def get_revenue(self):
+        return self.price - self.cost
+
     def get_cost(self):
         cost = 0
         for p_item in self.get_items.all():
@@ -245,7 +248,6 @@ class Purchase(models.Model):
 class PurchaseItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.PROTECT)
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='get_items')
-    # unit_cost = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.PositiveSmallIntegerField(default=1)
     description = models.CharField(max_length=120, blank=True, null=True)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
