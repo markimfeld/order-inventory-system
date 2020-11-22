@@ -274,6 +274,8 @@ class ProductEditView(UpdateView):
                 self.object = form.save()
                 items.instance = self.object
                 items.save()
+                self.object.cost = self.object.get_cost()
+                self.object.save()
                 message = f'El producto {self.object.name} fue actualizado exitosamente!'
                 messages.add_message(self.request, messages.SUCCESS, message)
                 return HttpResponseRedirect(self.get_success_url())
