@@ -817,6 +817,8 @@ class SalesReportView(ListView):
     def get_context_data(self, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
         
+        # context['total_cost'] = Sale.objects.aggregate(total_cost=Coalesce(Sum('get_cost_sale'), Value(0)))['total_cost']
+        context['total_cost'] = Sale.objects.all().first().get_cost_sale()
         context['weekly_total'] = Sale.objects.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
         context['products_sold_total'] = Sale.objects.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities']
 

@@ -310,6 +310,13 @@ class Sale(models.Model):
     total = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     products = models.ManyToManyField(Product, through='SaleItem')
 
+    def get_cost_sale(self):
+        sale_cost = 0
+        for s_product in self.get_products.all():
+            sale_cost += (s_product.product.cost * s_product.quantity)
+
+        return sale_cost
+
     def get_products_quantity(self):
         return self.get_products.aggregate(total=Sum('quantity'))['total']
 
