@@ -57,7 +57,6 @@
                         <th>Item</th>
                         <th>Cantidad</th>
                         <th>Descripcion</th>
-                        <th>Costo Unidad</th>
                         <th class="text-center">¿Borrar?</th>
                     </tr>
                 </thead>
@@ -71,7 +70,6 @@
                             <td width="200px">{{ form.item|add_class:'form-control' }}</td>
                             <td width="200px">{{ form.quantity|add_class:'form-control' }}</td>
                             <td>{{ form.description|add_class:'form-control' }}</td>
-                            <td>{{ form.unit_cost|add_class:'form-control'|attr:'min:0' }}</td>
                             <td class="text-center">{{ form.DELETE|add_class:'form-check-input' }}</td>
                         </tr>
                         {% endfor %}
@@ -81,7 +79,6 @@
                         <td width="200px">{{ items.empty_form.item|add_class:'form-control' }}</td>
                         <td width="200px">{{ items.empty_form.quantity|add_class:'form-control' }}</td>
                         <td>{{ items.empty_form.description|add_class:'form-control' }}</td>
-                        <td>{{ items.empty_form.unit_cost|add_class:'form-control'|attr:'min:0' }}</td>
                         {% if items.can_delete %}
                             <td class="text-center">{{ items.empty_form.DELETE|add_class:'form-check-input' }}</td>
                         {% endif %}

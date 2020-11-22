@@ -87,7 +87,7 @@ class ProductWithInventoryManager(models.Manager):
 class Product(models.Model):
     name = models.CharField(max_length=64)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    cost = models.DecimalField(max_digits=8, decimal_places=2)
+    cost = models.DecimalField(max_digits=8, decimal_places=2, null=True)
     image = models.ImageField(upload_to='media/products/', default='empty.png')
     description = models.CharField(max_length=120, blank=True, null=True)
     is_active = models.BooleanField(default=True)
@@ -100,6 +100,12 @@ class Product(models.Model):
     active_products = ProductActiveManager()
     products_with_inventory = ProductWithInventoryManager()
 
+    def get_cost(self):
+        cost = 0
+        for p_item in self.get_items.all():
+            cost += p_item.item.cost
+
+        return cost
 
     def get_items_detail(self):
         return [(p_item.item.name, p_item.quantity) for p_item in self.get_items.all()]
@@ -239,13 +245,13 @@ class Purchase(models.Model):
 class PurchaseItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.PROTECT)
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, related_name='get_items')
-    unit_cost = models.DecimalField(max_digits=8, decimal_places=2)
+    # unit_cost = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.PositiveSmallIntegerField(default=1)
     description = models.CharField(max_length=120, blank=True, null=True)
     subtotal = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
 
     def calculate_subtotal(self):
-        self.subtotal = self.unit_cost * self.quantity
+        self.subtotal = self.item.cost * self.quantity
         self.save()
 
     def __str__(self):

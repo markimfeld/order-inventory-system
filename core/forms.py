@@ -30,7 +30,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         # excluyo items porque los agrego luego en el controlador
-        exclude = ('items', 'is_active', )
+        exclude = ('items', 'is_active', 'cost')
 
 
 class ProductItemForm(forms.ModelForm):
@@ -77,7 +77,7 @@ class PurchaseItemForm(forms.ModelForm):
 
 PurchaseItemFormSet = inlineformset_factory (
     Purchase, PurchaseItem, form=PurchaseItemForm,
-    fields = ['item', 'purchase', 'unit_cost', 'quantity', 'description'],
+    fields = ['item', 'purchase', 'quantity', 'description'],
     extra=1,
     can_delete=True,
 )
