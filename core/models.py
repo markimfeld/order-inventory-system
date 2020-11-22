@@ -103,7 +103,7 @@ class Product(models.Model):
     def get_cost(self):
         cost = 0
         for p_item in self.get_items.all():
-            cost += p_item.item.cost
+            cost += (p_item.item.cost * p_item.quantity)
 
         return cost
 
