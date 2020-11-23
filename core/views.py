@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 
 from django.db.models import Sum, Value
@@ -816,11 +818,22 @@ class SalesReportView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
+
+        start_date = datetime.date(2020, 11, 22)
+
+        sales = Sale.objects.all().filter(created_at__gt=start_date)
         
-        # context['total_cost'] = Sale.objects.aggregate(total_cost=Coalesce(Sum('get_cost_sale'), Value(0)))['total_cost']
-        context['total_cost'] = Sale.objects.all().first().get_cost_sale()
-        context['weekly_total'] = Sale.objects.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
-        context['products_sold_total'] = Sale.objects.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities']
+        total_cost = 0
+        for sale in sales:
+            total_cost += sale.get_cost_sale()
+
+        total_incomes = sales.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
+
+        context['total_cost'] = total_cost
+        context['total_incomes'] = total_incomes
+        context['revenue'] = total_incomes - total_cost
+        context['products_sold_total'] = sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities']
+        context['sales'] = sales
 
         return context
 

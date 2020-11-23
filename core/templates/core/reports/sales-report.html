@@ -38,7 +38,7 @@
 
 {% block rows %}
 
-    {% for sale in object_list %}
+    {% for sale in sales %}
         <tr>
             <td>{{ sale.id }}</td>
             <td>{{ sale.customer.full_name.upper }}</td>
@@ -53,17 +53,32 @@
 
 {% block tfoot %}
     <tr>
-        <td style="border-top: 3px solid #CCC;"></td>
-        <td style="border-top: 3px solid #CCC;"></td>
-        <td style="border-top: 3px solid #CCC;"></td>
-        <th style="border-top: 3px solid #CCC;" class="text-right h5">Total</th>
-        <th style="border-top: 3px solid #CCC;" class="text-center h5">{{ products_sold_total }}</th>
-        <th style="border-top: 3px solid #CCC;" class="text-center h5">${{ weekly_total }}</th>
+        <td style="border-top: 3px solid #DEE2E6;"></td>
+        <td style="border-top: 3px solid #DEE2E6;"></td>
+        <td style="border-top: 3px solid #DEE2E6;"></td>
+        <th style="border-top: 3px solid #DEE2E6;" class="text-right h6 text-bold">Total</th>
+        <th style="border-top: 3px solid #DEE2E6;" class="text-center h6 text-bold">{{ products_sold_total }}</th>
+        <th style="border-top: 3px solid #DEE2E6;" class="text-center h6 text-bold">${{ total_incomes }}</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th class="text-right h6 text-bold">Costo</th>
+        <th class="text-center h6 text-bold">-</th>
+        <th class="text-center h6 text-bold">${{ total_cost }}</th>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <th class="text-right h6 text-bold">Utilidad</th>
+        <th class="text-center h6 text-bold">-</th>
+        <th class="text-center h6 text-bold">${{ revenue }}</th>
     </tr>
 {% endblock %}
 
 {% block extras %}
-{{ total_cost }}
 {% endblock %}
 
 
