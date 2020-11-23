@@ -821,7 +821,7 @@ class SalesReportView(ListView):
 
         start_date = datetime.date(2020, 11, 22)
 
-        sales = Sale.objects.all().filter(created_at__gt=start_date)
+        sales = Sale.objects.all()[:4]
         
         total_cost = 0
         for sale in sales:
