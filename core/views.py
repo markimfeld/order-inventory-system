@@ -819,9 +819,10 @@ class SalesReportView(ListView):
     def get_context_data(self, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
 
-        start_date = datetime.date(2020, 11, 22)
+        from_date = self.request.GET.get('startDate')
+        to_date = self.request.GET.get('endDate')
 
-        sales = Sale.objects.all()[:4]
+        sales = Sale.objects.all().filter(created_at__date__range=(from_date, to_date))
         
         total_cost = 0
         for sale in sales:

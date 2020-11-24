@@ -6,12 +6,24 @@
 <!-- DataTables -->
 <link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
 <link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+
+    {% block extra-head %}
+    {% endblock %}
+
 {% endblock %}
 
 {% block breadcrumb-page %}{% endblock %}
 
 
 {% block main-content %}
+
+    <div class="card">
+        <div class="card-body">
+        {% block filters %}
+        {% endblock %}
+        </div>
+    </div>
+
     {% block messages %}
     {% endblock %}
     <div class="card card-primary">
@@ -88,9 +100,7 @@
   });
 </script>
 
-<script>
     {% block extra-js %}
     {% endblock extra-js %}
-</script>
 
 {% endblock %}

@@ -3,9 +3,11 @@
 {% load static %}
 
 
+
 {% block breadcrumb-page %}
     Ventas
 {% endblock %}
+
 
 {% block messages %}
     <div class="row">
@@ -75,10 +77,14 @@
     </a>
 {% endblock %}
 
+
 {% block extra-js %}
 <script>
     $(document).ready(function {
         $('.alert').alert('close');
+
+
+        $('#report-filter-date').daterangepicker()
     });
 </script>
 {% endblock extra-js %}
