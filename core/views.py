@@ -47,6 +47,7 @@ from core.forms import (
 User = get_user_model()
 
 
+from core.utilities import query_is_valid
 
 
 # Create your views here.
@@ -819,10 +820,14 @@ class SalesReportView(ListView):
     def get_context_data(self, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
 
+        sales = Sale.objects.all()
+
         from_date = self.request.GET.get('startDate')
         to_date = self.request.GET.get('endDate')
 
-        sales = Sale.objects.all().filter(created_at__date__range=(from_date, to_date))
+        if query_is_valid(from_date) and query_is_valid(to_date):
+            sales = Sale.objects.all().filter(created_at__date__range=(from_date, to_date))
+
         
         total_cost = 0
         for sale in sales:
