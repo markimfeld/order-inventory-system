@@ -88,10 +88,12 @@
   $(function () {
     $("#example1").DataTable({
         dom: 'lBfrtip',
-        buttons: [
-            'pdf',
-            'excel',
-        ],
+        buttons: [{ extend: 'print',
+            footer: true,
+            exportOptions: {
+                columns: ':visible'
+            }
+        }],
         "responsive": true,
         "autoWidth": false,
         "language": {
