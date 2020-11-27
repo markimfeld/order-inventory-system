@@ -1,0 +1,154 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% block head %}
+ <!-- daterange picker -->
+ <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+<!-- Tempusdominus Bbootstrap 4 -->
+<link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<!-- Select2 -->
+<link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+{% endblock %} 
+
+{% block main-content %}
+
+<div class="card">
+    <div class="card-body">
+         <!-- Date range -->
+        <form id="dateRangeForm" method="get">
+            <div class="form-group">
+              <label>Date range:</label>
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">
+                    <i class="far fa-calendar-alt"></i>
+                  </span>
+                </div>
+                <input type="text" class="form-control float-right" id="filter-date">
+              </div>
+              <!-- /.input group -->
+            </div>
+            <!-- /.form group -->
+            <input name="startDate" type="hidden" id="startDate">
+            <input name="endDate" type="hidden" id="endDate">
+        </form>
+    </div>
+</div>
+
+<!-- Main content -->
+<div class="invoice p-3 mb-3">
+    <!-- title row -->
+    <div class="row">
+        <div class="col-12">
+            <h4>
+                <i class="fas fa-chart-bar"></i> Reporte de Ventas
+                <small class="float-right">Fecha: {% now "d/m/Y" %}</small>
+            </h4>
+        </div>
+        <!-- /.col -->
+    </div>
+
+    <!-- Table row -->
+    <div class="row">
+        <div class="col-12 table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Cantidad</th>
+                        <th>Cliente</th>
+                        <th>Nro #</th>
+                        <th>Fecha de registro</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                    <tr>
+                        <td>{{ sale.get_products_quantity }}</td>
+                        <td>{{ sale.customer.full_name }}</td>
+                        <td>{{ sale.id }}</td>
+                        <td>{{ sale.created_at }}</td>
+                        <td>${{ sale.total }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+    <div class="row">
+        <div class="col-6">
+        </div>
+        <!-- /.col -->
+        <div class="col-6">
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <th style="width:50%">Total:</th>
+                        <td>${{ total_incomes }}</td>
+                    </tr>
+                    <tr>
+                        <th>Costo:</th>
+                        <td>${{ total_cost }}</td>
+                    </tr>
+                    <tr>
+                        <th>Total:</th>
+                        <td>${{ revenue }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+<!-- /.row -->
+
+<!-- this row will not appear when printing -->
+<div class="row no-print">
+    <div class="col-12">
+        <a href="{% url 'core:generate-pdf' %}" target="_blank" class="btn btn-primary float-right" style="margin-right: 5px;"><i class="fas fa-download"></i> Generar PDF</a>
+    </div>
+</div>
+</div>
+<!-- /.invoice -->
+{% endblock %}
+
+{% block js %}
+
+<!-- InputMask -->
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/inputmask/min/jquery.inputmask.bundle.min.js' %}"></script>
+<!-- date-range-picker -->
+<script src="{% static 'plugins/daterangepicker/daterangepicker.js' %}"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- Select2 -->
+<script src="{% static 'plugins/select2/js/select2.full.min.js' %}"></script>
+
+
+<script>
+    $(document).ready(function() {
+        $('.alert').alert('close');
+
+
+        //Date range picker
+        $('#filter-date').daterangepicker();
+
+
+        $('#filter-date').on('apply.daterangepicker', function(ev, picker){
+            const startDate = $('#startDate').val(picker.startDate.format('YYYY-MM-DD'));
+            const endDate = $('#endDate').val(picker.endDate.format('YYYY-MM-DD'));
+
+            $('#dateRangeForm').submit();
+
+        });
+
+    });
+
+</script>
+
+{% endblock js %}

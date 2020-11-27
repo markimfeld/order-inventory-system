@@ -4,11 +4,10 @@ from django.contrib.auth import get_user_model
 
 from django.db.models import Sum, Value
 from django.db.models.functions import Coalesce
-from django.contrib import messages
-
+from django.contrib import messages 
 from django.db import transaction
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 
 from django.shortcuts import render, reverse 
 from django.views.generic import TemplateView
@@ -49,6 +48,9 @@ User = get_user_model()
 
 from core.utilities import query_is_valid
 
+from django.views.generic import View
+from django.template.loader import get_template
+from .utils import render_to_pdf
 
 # Create your views here.
 class DashBoard(TemplateView):
@@ -815,7 +817,7 @@ def get_most_sold_products(request):
 
 class SalesReportView(ListView):
     model = Sale
-    template_name = 'core/reports/sales-report.html'
+    template_name = 'core/reports/sales-report-print.html'
 
     def get_context_data(self, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
@@ -842,6 +844,38 @@ class SalesReportView(ListView):
         context['sales'] = sales
 
         return context
+
+class GeneratePDF(View):
+
+    def get(self, request, *args, **kwargs):
+
+        template = get_template('core/reports/invoice-print.html')
+
+        sales = Sale.objects.all()
+
+        from_date = request.GET.get('startDate')
+        to_date = request.GET.get('endDate')
+
+        if query_is_valid(from_date) and query_is_valid(to_date):
+            sales = Sale.objects.all().filter(created_at__date__range=(from_date, to_date))
+
+        
+        total_cost = 0
+        for sale in sales:
+            total_cost += sale.get_cost_sale()
+
+        total_incomes = sales.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
+
+        context = {
+            'total_cost': total_cost,
+            'total_incomes': total_incomes,
+            'revenue': total_incomes - total_cost,
+            'products_sold_total': sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities'],
+            'sales': sales
+        }
+
+        html = template.render(context)
+        return HttpResponse(html)
 
 
 # ACCOUNTS

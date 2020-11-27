@@ -3,7 +3,8 @@ from django.urls import path
 
 from core.views import (
     # REPORTS
-    get_most_sold_products
+    get_most_sold_products,
+    GeneratePDF
 )
 
 from core.views import (
@@ -109,6 +110,7 @@ urlpatterns = [
     # REPORTS
     path('reports/sales/', login_required(SalesReportView.as_view()), name='sales-report'),
     path('reports/most-sold-products/', login_required(get_most_sold_products), name='get-most-sold-products'),
+    path('reports/sales/pdf/', login_required(GeneratePDF.as_view()), name='generate-pdf'),
     # USUARIOS
     path('accounts/users/', login_required(UserView.as_view()), name='users'),
 ]

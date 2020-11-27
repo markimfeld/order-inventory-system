@@ -85,14 +85,18 @@
 
 {% block tfoot %}
     <tr>
+        <!--<td style="border-top: 3px solid #DEE2E6;"></td>
         <td style="border-top: 3px solid #DEE2E6;"></td>
-        <td style="border-top: 3px solid #DEE2E6;"></td>
-        <td style="border-top: 3px solid #DEE2E6;"></td>
-        <th style="border-top: 3px solid #DEE2E6;" class="text-right h6 text-bold">Total</th>
-        <th style="border-top: 3px solid #DEE2E6;" class="text-center h6 text-bold">{{ products_sold_total }}</th>
-        <th style="border-top: 3px solid #DEE2E6;" class="text-center h6 text-bold">${{ total_incomes }}</th>
+        <td style="border-top: 3px solid #DEE2E6;"></td>-->
+        <!--<th style="border-top: 3px solid #DEE2E6;" class="h6 text-bold">{{ products_sold_total }}</th>-->
+        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">Total</th>
+        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">${{ total_incomes }}</th>
+        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">Costo</th>
+        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">${{ total_cost }}</th>
+        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">Utilidad</th>
+        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">${{ revenue }}</th>
     </tr>
-    <tr>
+    <!--<tr>
         <td></td>
         <td></td>
         <td></td>
@@ -107,8 +111,8 @@
         <th class="text-right h6 text-bold">Utilidad</th>
         <th class="text-center h6 text-bold">-</th>
         <th class="text-center h6 text-bold">${{ revenue }}</th>
-    </tr>
-{% endblock %}
+    </tr>-->
+{% endblock tfoot %}
 
 {% block extras %}
 {% endblock %}
