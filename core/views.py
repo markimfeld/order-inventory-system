@@ -845,6 +845,7 @@ class SalesReportView(ListView):
 
         return context
 
+
 class GeneratePDF(View):
 
     def get(self, request, *args, **kwargs):
@@ -875,6 +876,7 @@ class GeneratePDF(View):
         }
 
         html = template.render(context)
+        
         return HttpResponse(html)
 
 
