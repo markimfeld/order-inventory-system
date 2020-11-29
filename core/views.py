@@ -815,12 +815,12 @@ def get_most_sold_products(request):
     return JsonResponse(donutData)
 
 
-class SalesReportView(ListView):
-    model = Sale
+class SalesReportView(TemplateView):
     template_name = 'core/reports/sales-report-print.html'
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(SalesReportView, self).get_context_data(**kwargs)
+
 
         sales = Sale.objects.all()
 
@@ -837,6 +837,14 @@ class SalesReportView(ListView):
 
         total_incomes = sales.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
 
+        # context = {
+        #     'total_cost': total_cost,
+        #     'total_incomes': total_incomes,
+        #     'revenue': total_incomes - total_cost,
+        #     'products_sold_total': sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities'],
+        #     'sales': sales
+        # }
+
         context['total_cost'] = total_cost
         context['total_incomes'] = total_incomes
         context['revenue'] = total_incomes - total_cost
@@ -850,12 +858,14 @@ class GeneratePDF(View):
 
     def get(self, request, *args, **kwargs):
 
-        template = get_template('core/reports/invoice-print.html')
+        template = get_template('core/reports/pdf-report.html')
 
         sales = Sale.objects.all()
 
+
         from_date = request.GET.get('startDate')
         to_date = request.GET.get('endDate')
+
 
         if query_is_valid(from_date) and query_is_valid(to_date):
             sales = Sale.objects.all().filter(created_at__date__range=(from_date, to_date))
@@ -876,8 +886,11 @@ class GeneratePDF(View):
         }
 
         html = template.render(context)
+
+        pdf = render_to_pdf('core/reports/pdf-report.html', context)
         
-        return HttpResponse(html)
+        return HttpResponse(pdf, content_type='application/pdf')
+        # return HttpResponse(html)
 
 
 # ACCOUNTS
