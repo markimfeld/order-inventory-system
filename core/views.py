@@ -837,13 +837,6 @@ class SalesReportView(TemplateView):
 
         total_incomes = sales.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
 
-        # context = {
-        #     'total_cost': total_cost,
-        #     'total_incomes': total_incomes,
-        #     'revenue': total_incomes - total_cost,
-        #     'products_sold_total': sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities'],
-        #     'sales': sales
-        # }
 
         context['total_cost'] = total_cost
         context['total_incomes'] = total_incomes
@@ -890,7 +883,6 @@ class GeneratePDF(View):
         pdf = render_to_pdf('core/reports/pdf-report.html', context)
         
         return HttpResponse(pdf, content_type='application/pdf')
-        # return HttpResponse(html)
 
 
 # ACCOUNTS
