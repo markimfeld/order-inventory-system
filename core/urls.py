@@ -1,10 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.urls import path
+from django.urls import path, re_path
 
 from core.views import (
     # REPORTS
     get_most_sold_products,
-    GeneratePDF
 )
 
 from core.views import (
@@ -12,8 +11,7 @@ from core.views import (
     DashBoard,
     # ITEM
     ItemView, 
-    ItemCreateView, 
-    ItemEditView, 
+    ItemCreateView, ItemEditView, 
     ItemDeactivateView, 
     ItemActivateView, 
     # PRODUCT
@@ -53,7 +51,8 @@ from core.views import (
     CustomerActivateView,
     CustomerDetailView,
     # REPORTS
-    SalesReportView,
+    Report,
+    ReportDetails,
     # USERS
     UserView,
 )
@@ -108,9 +107,9 @@ urlpatterns = [
     path('customers/deactivate/<int:pk>/', login_required(CustomerDeactivateView.as_view()), name='customer-deactivate'),
     path('customers/activate/<int:pk>/', login_required(CustomerActivateView.as_view()), name='customer-activate'),
     # REPORTS
-    path('reports/sales/', login_required(SalesReportView.as_view()), name='sales-report'),
     path('reports/most-sold-products/', login_required(get_most_sold_products), name='get-most-sold-products'),
-    path('reports/sales/pdf/', login_required(GeneratePDF.as_view()), name='generate-pdf'),
+    path('reports/', login_required(Report.as_view()), name='report'),
+    path('reports/<int:start_year>/<int:start_month>/<int:start_day>/<int:end_year>/<int:end_month>/<int:end_day>/', login_required(ReportDetails.as_view()), name='report_details'),
     # USUARIOS
     path('accounts/users/', login_required(UserView.as_view()), name='users'),
 ]

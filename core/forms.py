@@ -113,3 +113,8 @@ SaleProductFormSet = inlineformset_factory (
     extra=0,
     can_delete=True,
 )
+
+
+class ReportForm(forms.Form):
+    start_date = forms.DateField()
+    end_date = forms.DateField()
