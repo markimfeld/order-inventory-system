@@ -9,8 +9,9 @@ from django.db import transaction
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 
-from django.shortcuts import render, reverse 
+from django.shortcuts import render, reverse, redirect 
 from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 from django.views import View
 
 from django.views.generic.list import ListView
@@ -40,7 +41,8 @@ from core.forms import (
     PurchaseItemFormSet,
     SaleForm,
     SaleItemForm,
-    SaleProductFormSet
+    SaleProductFormSet,
+    ReportForm
 )
 
 User = get_user_model()
@@ -815,49 +817,39 @@ def get_most_sold_products(request):
     return JsonResponse(donutData)
 
 
-class SalesReportView(TemplateView):
-    template_name = 'core/reports/sales-report-print.html'
+class Report(FormView):
+    template_name = 'core/reports/sales-report.html'
+    form_class = ReportForm
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(SalesReportView, self).get_context_data(**kwargs)
+    def form_valid(self, form):
+        start_date = form.cleaned_data.get('start_date')
+        end_date = form.cleaned_data.get('end_date')
 
+        start_year = start_date.year
+        # start_month = format(start_date, 'm')
+        start_month = start_date.month
+        # start_day = format(start_date, 'd')
+        start_day = start_date.day
 
-        sales = Sale.objects.all()
+        end_year = end_date.year
+        # end_month = format(end_date, 'm')
+        end_month = end_date.month
+        # end_day = format(end_date, 'd')
+        end_day = end_date.day
 
-        from_date = self.request.GET.get('startDate')
-        to_date = self.request.GET.get('endDate')
-
-        if query_is_valid(from_date) and query_is_valid(to_date):
-            sales = Sale.objects.all().filter(created_at__date__range=(from_date, to_date))
-
-        
-        total_cost = 0
-        for sale in sales:
-            total_cost += sale.get_cost_sale()
-
-        total_incomes = sales.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
-
-
-        context['total_cost'] = total_cost
-        context['total_incomes'] = total_incomes
-        context['revenue'] = total_incomes - total_cost
-        context['products_sold_total'] = sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities']
-        context['sales'] = sales
-
-        return context
+        return redirect('core:report_details', start_year, start_month, start_day, end_year, end_month, end_day)
 
 
-class GeneratePDF(View):
-
-    def get(self, request, *args, **kwargs):
-
-        template = get_template('core/reports/pdf-report.html')
+class ReportDetails(View):
+    
+    def get(self, request, start_year, start_month, start_day, end_year, end_month, end_day):
+        template = get_template('core/reports/sales-report-pdf.html')
 
         sales = Sale.objects.all()
 
 
-        from_date = request.GET.get('startDate')
-        to_date = request.GET.get('endDate')
+        from_date = datetime.date(start_year, start_month, start_day)
+        to_date = datetime.date(end_year, end_month, end_day)
 
 
         if query_is_valid(from_date) and query_is_valid(to_date):
@@ -880,10 +872,9 @@ class GeneratePDF(View):
 
         html = template.render(context)
 
-        pdf = render_to_pdf('core/reports/pdf-report.html', context)
+        pdf = render_to_pdf('core/reports/sales-report-pdf.html', context)
         
         return HttpResponse(pdf, content_type='application/pdf')
-
 
 # ACCOUNTS
 class UserView(ListView):

@@ -1,8 +1,10 @@
-{% extends 'list.html' %}
+{% extends 'layout.html' %}
+
+{% load widget_tweaks %}
 
 {% load static %}
 
-{% block extra-head %}
+{% block head %}
  <!-- daterange picker -->
  <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
 <!-- Tempusdominus Bbootstrap 4 -->
@@ -12,113 +14,50 @@
 <link rel="stylesheet" href="{% static 'plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
 {% endblock %} 
 
-{% block breadcrumb-page %}
-    Reporte de Ventas
-{% endblock %}
+{% block main-content %}
 
-{% block filters %}
- <!-- Date range -->
-<form id="dateRangeForm" method="get">
-    <div class="form-group">
-      <label>Date range:</label>
-
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text">
-            <i class="far fa-calendar-alt"></i>
-          </span>
-        </div>
-        <input type="text" class="form-control float-right" id="filter-date">
-      </div>
-      <!-- /.input group -->
+<div class="card">
+    <div class="card-header">
+        <h2>Reporte de ventas</h2>
     </div>
-    <!-- /.form group -->
-    <input name="startDate" type="hidden" id="startDate">
-    <input name="endDate" type="hidden" id="endDate">
-</form>
-{% endblock %}
-
-{% block messages %}
-    <div class="row">
-        {% if messages %}
-            <div class="col">
-                {% for message in messages %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>{{ message }}</strong> 
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <div class="card-body">
+        <form method="post">
+            {{ form.errors }}
+            {% csrf_token %}
+            <div class="row">
+                <!-- From Date -->
+                <div class="form-group col-6">
+                    <label>Desde:</label>
+                    <div class="input-group date" id="start_date" data-target-input="nearest">
+                        {{ form.start_date|add_class:"form-control datetimepicker-input"|attr:"data-target:'#start_date'" }}
+                        <div class="input-group-append" data-target="#start_date" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
                 </div>
-                {% endfor %}
+                <!-- /.form group -->
+
+                <!-- To Date -->
+                <div class="form-group col-6">
+                    <label>Hasta:</label>
+                    <div class="input-group date" id="end_date" data-target-input="nearest">
+                        {{ form.end_date|add_class:"form-control datetimepicker-input"|attr:"data-target:'#end_date'" }}
+                        <div class="input-group-append" data-target="#end_date" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.form group -->
             </div>
-        {% endif %}
+            <button class="btn btn-primary" type="submit">Generar reporte</button>
+        </form>
     </div>
-{% endblock %}
+</div>
 
-{% block title %}
-    <i class="fas fa-search"></i> Lista de Ventas
-{% endblock %}
-
-{% block columns %}
-    <th width="90px">Nro</th>
-    <th>Cliente</th>
-    <th>Ciudad</th>
-    <th>Fecha de registro</th>
-    <th class="text-center">Cantidad</th>
-    <th class="text-center">Total</th>
-{% endblock %}
-
-{% block rows %}
-
-    {% for sale in sales %}
-        <tr>
-            <td>{{ sale.id }}</td>
-            <td>{{ sale.customer.full_name.upper }}</td>
-            <td>{{ sale.customer.address.city.name.upper }}</td>
-            <td>{{ sale.created_at }}</td>
-            <td class="text-center">{{ sale.get_products_quantity }}</td>
-            <td class="text-center">${{ sale.total }}</td>
-        </tr>
-    {% endfor %}
 {% endblock %}
 
 
-{% block tfoot %}
-    <tr>
-        <!--<td style="border-top: 3px solid #DEE2E6;"></td>
-        <td style="border-top: 3px solid #DEE2E6;"></td>
-        <td style="border-top: 3px solid #DEE2E6;"></td>-->
-        <!--<th style="border-top: 3px solid #DEE2E6;" class="h6 text-bold">{{ products_sold_total }}</th>-->
-        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">Total</th>
-        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">${{ total_incomes }}</th>
-        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">Costo</th>
-        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">${{ total_cost }}</th>
-        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">Utilidad</th>
-        <th style="border-top: 5px solid #DEE2E6;" class="h6 text-bold">${{ revenue }}</th>
-    </tr>
-    <!--<tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <th class="text-right h6 text-bold">Costo</th>
-        <th class="text-center h6 text-bold">-</th>
-        <th class="text-center h6 text-bold">${{ total_cost }}</th>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <th class="text-right h6 text-bold">Utilidad</th>
-        <th class="text-center h6 text-bold">-</th>
-        <th class="text-center h6 text-bold">${{ revenue }}</th>
-    </tr>-->
-{% endblock tfoot %}
-
-{% block extras %}
-{% endblock %}
-
-
-{% block extra-js %}
+{% block js %}
 
 <!-- InputMask -->
 <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
@@ -137,17 +76,17 @@
 
 
         //Date range picker
-        $('#filter-date').daterangepicker();
-
-        $('#filter-date').on('apply.daterangepicker', function(ev, picker){
-            const startDate = $('#startDate').val(picker.startDate.format('YYYY-MM-DD'));
-            const endDate = $('#endDate').val(picker.endDate.format('YYYY-MM-DD'));
-
-            $('#dateRangeForm').submit();
+        $('#start_date').datetimepicker({
+            format: 'Y-M-D', 
+            defaultDate: new Date(),
         });
 
+        $('#end_date').datetimepicker({
+            format: 'Y-M-D',
+            defaultDate: new Date(),
+        });
     });
 
 </script>
 
-{% endblock extra-js %}
+{% endblock js %}
