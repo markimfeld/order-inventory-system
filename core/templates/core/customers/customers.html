@@ -26,7 +26,11 @@
 
 {% block title %}
     <i class="fas fa-search"></i> Lista de Clientes
+    <a class="btn btn-primary btn-flat btn-sm" href="{% url 'core:customer-add' %}">
+        <i class="fas fa-plus"></i> 
+    </a>
 {% endblock %}
+
 
 {% block columns %}
     <th>Nombre</th>

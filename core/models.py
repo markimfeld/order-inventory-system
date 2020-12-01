@@ -270,6 +270,9 @@ class Customer(models.Model):
     points = models.IntegerField(default=0)
     address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        unique_together = ['first_name', 'last_name']
+
     def increase_points(self, quantity):
         if quantity < 5:
             self.points += 1

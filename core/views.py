@@ -737,6 +737,12 @@ class CustomerCreateView(CreateView):
         messages.add_message(self.request, messages.SUCCESS, message)
         return HttpResponseRedirect(self.get_success_url())
 
+    def form_invalid(self, form):
+        form.errors['__all__'] = 'El cliente ya existe!'
+        message = form.errors.get('__all__')
+        messages.add_message(self.request, messages.ERROR, message)
+        return self.render_to_response(self.get_context_data(form=form))
+
 
 class CustomerEditView(UpdateView):
     model = Customer

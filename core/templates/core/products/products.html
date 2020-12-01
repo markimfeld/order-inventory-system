@@ -26,6 +26,9 @@
 
 {% block title %}
     <i class="fas fa-search"></i> Lista de Productos
+    <a class="btn btn-primary btn-flat btn-sm" href="{% url 'core:product-add' %}">
+        <i class="fas fa-plus"></i> 
+    </a>
 {% endblock %}
 
 {% block columns %}
@@ -76,7 +79,7 @@
 {% endblock %}
 
 {% block bottoms %}
-<a class="btn btn-primary btn-flat" href="{% url 'core:product-add' %}">
+    <a class="btn btn-primary btn-flat" href="{% url 'core:product-add' %}">
         <i class="fas fa-plus"></i> 
         Nuevo producto
     </a>

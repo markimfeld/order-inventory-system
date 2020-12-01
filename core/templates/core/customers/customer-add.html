@@ -25,6 +25,23 @@
     Nuevo cliente
 {% endblock %}
 
+{% block messages %}
+    <div class="row">
+        {% if messages %}
+            <div class="col">
+                {% for message in messages %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong> 
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
 {% block field %}
 <div class="row">
     <div class="form-group col-sm-6">
