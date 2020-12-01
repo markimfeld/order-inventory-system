@@ -862,11 +862,21 @@ class ReportDetails(View):
 
         total_incomes = sales.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
 
+        items_sold_total = 0
+        combos_sold_total = 0
+        for sale in sales:
+            items_sold_total += sale.get_items_quantity()
+            combos_sold_total += sale.get_combos_sale_quantity()
+
         context = {
+            'from_date': from_date,
+            'to_date': to_date,
             'total_cost': total_cost,
             'total_incomes': total_incomes,
             'revenue': total_incomes - total_cost,
             'products_sold_total': sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities'],
+            'items_sold_total': items_sold_total,
+            'combos_sold_total': combos_sold_total,
             'sales': sales
         }
 

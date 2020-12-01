@@ -1,71 +1,109 @@
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!--<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns="http://www.w3.org/1999/xhtml">-->
+<!DOCTYPE html>
+<html>
 <head>
     <title>Reporte de Ventas</title>
 
     <style>
-        table.content
-        {
-            width: 100%;
+
+        table {
+            font-family: arial, sans-serif;
             border-collapse: collapse;
-            padding: 0px;
-            margin: 0px;
-            font-family: Arial;
-            font-size: 11px;
-            line-height: 1.4;
+            width: 100%;
         }
 
-        .content th
-        {
-            border: solid 1px #000000;
-            padding: .2em .5em;
-            margin: auto;
+        td, th {
+            border-bottom: 1px solid #000000;
             text-align: center;
+            padding: .3em .5em;
+            font-size: 1.2rem;
         }
 
-        .content .row
-        {
-            border: solid 1px #000000;
-            padding: .2em .5em;
+        tfoot tr {
+            background-color: #DDDDDD;
         }
+
+        .card {
+            background-color: green;
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+        }
+
 
         .text-center {
             text-align: center;
         }
 
     </style>
+
 </head>
 <body>
-    <h1 style="text-align: center;">Reporte de Ventas</h1>
-    <table class="content">
-        <tr>
-           <th>Cliente</th>
-           <th class="text-center">Cantidad</th>
-           <th>Fecha de registro</th>
-           <th>Subtotal</th>
-        </tr>
-        {% for sale in sales %}
-        <tr class="row">
-            <td>{{ sale.customer.full_name }}</td>
-            <td class="text-center">{{ sale.get_products_quantity }}</td>
-            <td class="text-center">{{ sale.created_at|date:"d/m/Y" }}</td>
-            <td class="text-center">${{ sale.total }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <h3 style="text-align: right;">Fecha: {% now "d/m/Y" %}</h3>
+    <h1 style="text-align: center; margin: 0; padding: 0; font-size: 3rem;">Reporte de Ventas</h1>
+    <p style="text-align: center; margin-bottom: 1rem; font-size: 1rem;">{{ from_date|date:"d/m/Y" }} a {{ to_date|date:"d/m/Y" }}</p>
 
-    <br>
     <br>
     
 
-    <div>
-        <h3 style="font-size: 2em;">Balance:</h3>
-        <ul>
-            <li style="font-size: 1.2em;">Total: <b>${{ total_incomes }}</b></li>
-            <li style="font-size: 1.2em;">Costo: <b>${{ total_cost }}</b></li>
-            <li style="font-size: 1.2em;">Utilidad: <b>${{ revenue }}</b></li>
-        </ul>
-    </div>
+    <table>
+        <tr>
+            <th>Total</th>
+            <th>Costo</th>
+            <th>Ganancia</th>
+        </tr>
+        <tfoot>
+            <tr>
+                <td>${{ total_incomes }}</td>
+                <td>${{ total_cost }}</td>
+                <td>${{ revenue }}</td>
+            </tr>
+        </tfoot>
+    </table>
 
+
+    <br>
+    <br>
+    <br>
+
+    <table>
+        <thead>
+            <tr>
+               <th>Cliente</th>
+               <th class="text-center">Articulos</th>
+               <th class="text-center">Combos</th>
+               <th class="text-center">Productos Total</th>
+               <th>Fecha de registro</th>
+               <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sale in sales %}
+            <tr>
+                <td>{{ sale.customer.full_name }}</td>
+                <td class="text-center">{{ sale.get_items_quantity }}</td>
+                <td class="text-center">{{ sale.get_combos_sale_quantity }}</td>
+                <td class="text-center">{{ sale.get_products_quantity }}</td>
+                <td class="text-center">{{ sale.created_at|date:"d/m/Y" }}</td>
+                <td class="text-center">${{ sale.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Totales</th>
+                <th>{{ items_sold_total }}</th>
+                <th>{{ combos_sold_total }}</th>
+                <th>{{ products_sold_total }}</th>
+                <th>-</th>
+                <th>${{ total_incomes }}</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    
 </body>
 </html>

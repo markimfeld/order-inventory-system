@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 
 User = get_user_model()
 
@@ -318,7 +319,13 @@ class Sale(models.Model):
         return sale_cost
 
     def get_products_quantity(self):
-        return self.get_products.aggregate(total=Sum('quantity'))['total']
+        return self.get_products.aggregate(total=Coalesce(Sum('quantity'), Value(0)))['total']
+
+    def get_items_quantity(self):
+        return self.get_products.all().filter(product__category__name__exact='Individual').aggregate(total=Coalesce(Sum('quantity'), Value(0)))['total']
+
+    def get_combos_sale_quantity(self):
+        return self.get_products.all().filter(product__category__name__exact='Combo').aggregate(total=Coalesce(Sum('quantity'), Value(0)))['total']
 
     def calculate_products_quantities(self):
         items= Item.objects.all()
