@@ -877,7 +877,7 @@ class ReportDetails(View):
             'products_sold_total': sales.annotate(quantity=Sum('get_products__quantity')).aggregate(quantities=Coalesce(Sum('quantity'), Value(0)))['quantities'],
             'items_sold_total': items_sold_total,
             'combos_sold_total': combos_sold_total,
-            'sales': sales
+            'sales': sales.order_by('created_at')
         }
 
         html = template.render(context)
