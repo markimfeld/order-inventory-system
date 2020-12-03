@@ -83,7 +83,7 @@
          <!-- BAR CHART -->
             <div class="card card-success">
               <div class="card-header">
-                <h3 class="card-title">Productos más vendidos</h3>
+                <h3 class="card-title">Ventas los últimos 7 días</h3>
 
               </div>
               <div class="card-body">
@@ -159,7 +159,7 @@
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        stepSize: 5,
+                        stepSize: 100,
                     }
                 }]
             }
@@ -172,7 +172,7 @@
         success: data => {
             labels = data.labels;
             datasets = [{
-                label: 'Productos más vendidos',
+                label: 'Venta en el día',
                 data: data.datasets[0].data,
                 backgroundColor: data.backgroundColor
             }]

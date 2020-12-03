@@ -804,11 +804,24 @@ def get_most_sold_products(request):
 
     sale_items = SaleItem.objects.all().select_related('product', 'sale')
 
-    most_sold_products= sale_items.values('product__name').annotate(total_sales=Coalesce(Sum('quantity'), Value(0))).order_by('-total_sales')
+    most_sold_products = sale_items.values('product__name').annotate(total_sales=Coalesce(Sum('quantity'), Value(0))).order_by('-total_sales')
+
+    from datetime import timedelta
+    today = datetime.date.today()
+    seven_day_before = today - timedelta(days = 7)
+
+    last_seven_days_sales = Sale.objects.filter(created_at__date__range=[seven_day_before, today])
+
+    last_seven_days_sales_group_by_day = last_seven_days_sales.values('created_at__date').annotate(total=Coalesce(Sum('total'), Value(0)))
 
 
-    labels = [item['product__name'] for item in most_sold_products]
-    data = [item['total_sales'] for item in most_sold_products]
+
+
+    labels = [day_sale['created_at__date'] for day_sale in last_seven_days_sales_group_by_day]
+    data = [day_sale['total'] for day_sale in last_seven_days_sales_group_by_day]
+
+    # labels = [item['product__name'] for item in most_sold_products]
+    # data = [item['total_sales'] for item in most_sold_products]
     backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB','#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB']
     donutData = {
         'labels': labels,
