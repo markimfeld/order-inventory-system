@@ -23,6 +23,7 @@ from django.views.generic.edit import (
 )
 
 from core.models import (
+    Address,
     Item, 
     Product, 
     Category, 
@@ -810,11 +811,21 @@ def get_most_sold_products(request):
     today = datetime.date.today()
     seven_day_before = today - timedelta(days = 7)
 
+    year_before = today - timedelta(days = 365)
+
     last_seven_days_sales = Sale.objects.filter(created_at__date__range=[seven_day_before, today])
+
+    last_year_sales = Sale.objects.filter(created_at__date__range=[year_before, today])
 
     last_seven_days_sales_group_by_day = last_seven_days_sales.values('created_at__date').annotate(total=Coalesce(Sum('total'), Value(0)))
 
+    last_year_sales_group_by_month = last_year_sales.values('created_at__date__month').annotate(total=Coalesce(Sum('total'), Value(0)))
 
+
+    months = [0, 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
+    # labels = [months[month_sale['created_at__date__month']] for month_sale in last_year_sales_group_by_month]
+    # data = [month_sale['total'] for month_sale in last_year_sales_group_by_month]
 
 
     labels = [day_sale['created_at__date'] for day_sale in last_seven_days_sales_group_by_day]
@@ -904,6 +915,15 @@ class ReportDetails(View):
         pdf = render_to_pdf('core/reports/sales-report-pdf.html', context)
         
         return HttpResponse(pdf, content_type='application/pdf')
+
+
+# ADDRESS
+class AddressCreateView(CreateView):
+    model = Address
+    fields = ('number', 'street', 'neightborhood', 'postal_code', 'city', )
+    template_name = 'core/address/address-add.html'
+    success_url = reverse_lazy('core:customer-add')
+
 
 # ACCOUNTS
 class UserView(ListView):

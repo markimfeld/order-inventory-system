@@ -55,6 +55,8 @@ from core.views import (
     ReportDetails,
     # USERS
     UserView,
+    # ADDRESS
+    AddressCreateView,
 )
 
 app_name = 'core'
@@ -110,6 +112,8 @@ urlpatterns = [
     path('reports/most-sold-products/', login_required(get_most_sold_products), name='get-most-sold-products'),
     path('reports/', login_required(Report.as_view()), name='report'),
     path('reports/<int:start_year>/<int:start_month>/<int:start_day>/<int:end_year>/<int:end_month>/<int:end_day>/', login_required(ReportDetails.as_view()), name='report_details'),
-    # USUARIOS
+    # USERS
     path('accounts/users/', login_required(UserView.as_view()), name='users'),
+    # ADDRESSES
+    path('addresses/add/', login_required(AddressCreateView.as_view()), name='address-add'),
 ]

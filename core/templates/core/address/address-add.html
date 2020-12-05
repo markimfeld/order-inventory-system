@@ -17,12 +17,12 @@
 {% endblock %}
 
 {% block breadcrumb-page %}
-    Clientes
+    Dirección 
 {% endblock %}
 
 
 {% block title %}
-    Nuevo cliente
+    Nueva dirección
 {% endblock %}
 
 {% block messages %}
@@ -44,21 +44,27 @@
 
 {% block field %}
 <div class="row">
+    <div class="form-group col-sm-4">
+        <label for="exampleInputEmail1">Número(*):</label>
+        {{ form.number|add_class:'form-control'|attr:'placeholder:Escribe la calle aquí...' }}
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="exampleInputEmail1">Calle(*):</label>
+        {{ form.street|add_class:'form-control'|attr:'placeholder:Escribe la calle aquí...' }}
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="exampleInputEmail1">Barrio(*):</label>
+        {{ form.neightborhood|add_class:'form-control'|attr:'placeholder:Escribe el barrio aquí...' }}
+    </div>
+</div>
+<div class="row">
     <div class="form-group col-sm-6">
-        <label for="exampleInputEmail1">Nombre(*):</label>
-        {{ form.first_name|add_class:'form-control'|attr:'placeholder:Escribe el nombre aquí...' }}
+        <label for="exampleInputEmail1">Código Postal(*):</label>
+        {{ form.postal_code|add_class:'form-control'|attr:'placeholder:Escribe el código postal aquí...' }}
     </div>
     <div class="form-group col-sm-6">
-        <label for="exampleInputEmail1">Apellido(*):</label>
-        {{ form.last_name|add_class:'form-control'|attr:'placeholder:Escribe el apellido aquí...' }}
-    </div>
-    <div class="form-group col-sm-10">
-        <label for="exampleInputEmail1">Dirección(*):</label>
-        {{ form.address|add_class:'form-control select2bs4' }}
-        <a href="{% url 'core:address-add' %}" class="btn btn-link">
-            <!--<i class="fas fa-plus"></i>-->
-            Agregar dirección
-        </a>
+        <label for="exampleInputEmail1">Ciudad(*):</label>
+        {{ form.city|add_class:'form-control select2bs4' }}
     </div>
 </div>
 {% endblock %}
@@ -66,9 +72,9 @@
 {% block bottoms %}
     <button type="submit" class="btn btn-primary btn-flat">
         <i class="fas fa-save"></i>
-        Guardar cliente
+        Guardar dirección
     </button>
-    <a href="{% url 'core:customers' %}" class="btn btn-danger btn-flat">
+    <a href="{% url 'core:customer-add' %}" class="btn btn-danger btn-flat">
         <i class="fas fa-times"></i>
         Cancelar
     </a>
