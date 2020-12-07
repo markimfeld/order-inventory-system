@@ -1,4 +1,5 @@
 import datetime
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 
@@ -60,13 +61,32 @@ class DashBoard(TemplateView):
     template_name = 'core/index.html'
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
-        context['sales_to_prepare'] = Sale.objects.filter(status__name__exact='Preparar')
-        context['sales'] = Sale.objects.filter(status__name__exact='Pagado')
-        context['revenue'] = Sale.objects.filter(status__name__exact='Pagado').aggregate(value=Coalesce(Sum('total'), Value(0)))
-        context['customers'] = Customer.objects.all().count()
+
+        today = datetime.date.today()
+
+        seven_day_before = today - timedelta(days = 6)
+
+        sales = Sale.objects.all()
+        
+        sales_last_seven_days = sales.filter(created_at__date__range=[seven_day_before, today]).filter(status__name__exact='Pagado').all()
+
+        total_cost = 0
+        for sale in sales_last_seven_days:
+            total_cost += sale.get_cost_sale()
+
+        total_incomes = sales_last_seven_days.aggregate(sales=Coalesce(Sum('total'), Value(0)))['sales']
+
+
+        context['sales_to_prepare'] = sales.filter(created_at__date__range=[seven_day_before, today]).filter(status__name__exact='Preparar')
+        context['sales'] = sales.filter(status__name__exact='Pagado')
+        context['weekly_billing'] = sales_last_seven_days.aggregate(value=Coalesce(Sum('total'), Value(0)))['value']
+        context['weekly_revenue'] = total_incomes - total_cost
+        context['weekly_billing_no_paid'] = sales.filter(created_at__date__range=[seven_day_before, today]).exclude(status__name__exact='Pagado').all().aggregate(value=Coalesce(Sum('total'), Value(0)))['value']
         context['items'] = Item.objects.all()
         return context
+
 
 # ITEMS
 class ItemView(ListView):
@@ -801,38 +821,59 @@ class CustomerActivateView(TemplateView):
 
 
 # API DATA FOR CHARTS
-def get_most_sold_products(request):
+def get_last_seven_days_sales(request):
 
     sale_items = SaleItem.objects.all().select_related('product', 'sale')
 
-    most_sold_products = sale_items.values('product__name').annotate(total_sales=Coalesce(Sum('quantity'), Value(0))).order_by('-total_sales')
+    # most_sold_products = sale_items.values('product__name').annotate(total_sales=Coalesce(Sum('quantity'), Value(0))).order_by('-total_sales')
 
-    from datetime import timedelta
     today = datetime.date.today()
-    seven_day_before = today - timedelta(days = 7)
 
-    year_before = today - timedelta(days = 365)
+    seven_day_before = today - timedelta(days = 6)
 
-    last_seven_days_sales = Sale.objects.filter(created_at__date__range=[seven_day_before, today])
 
-    last_year_sales = Sale.objects.filter(created_at__date__range=[year_before, today])
+    last_seven_days_sales = Sale.objects.filter(created_at__date__range=[seven_day_before, today]).filter(status__name__exact='Pagado')
 
-    last_seven_days_sales_group_by_day = last_seven_days_sales.values('created_at__date').annotate(total=Coalesce(Sum('total'), Value(0)))
+
+    last_seven_days_sales_group_by_day = last_seven_days_sales.values('created_at__date__week_day').annotate(total=Coalesce(Sum('total'), Value(0))).order_by('created_at__date')
+
+
+    days = [0, 'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+
+
+    labels = [days[day_sale['created_at__date__week_day']] for day_sale in last_seven_days_sales_group_by_day]
+    data = [day_sale['total'] for day_sale in last_seven_days_sales_group_by_day]
+
+    backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB','#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB']
+    donutData = {
+        'labels': labels,
+        'datasets': [
+            {
+                'data': data
+            },
+        ],
+        'backgroundColor': backgroundColor
+    }
+
+    return JsonResponse(donutData)
+
+
+def get_year_sales_group_by_month(request):
+
+    
+    today = datetime.date.today()
+
+    year_before = today - timedelta(days = 364)
+
+    last_year_sales = Sale.objects.filter(created_at__date__range=[year_before, today]).filter(status__name__exact='Pagado')
 
     last_year_sales_group_by_month = last_year_sales.values('created_at__date__month').annotate(total=Coalesce(Sum('total'), Value(0)))
 
-
     months = [0, 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
-    # labels = [months[month_sale['created_at__date__month']] for month_sale in last_year_sales_group_by_month]
-    # data = [month_sale['total'] for month_sale in last_year_sales_group_by_month]
+    labels = [months[month_sale['created_at__date__month']] for month_sale in last_year_sales_group_by_month]
+    data = [month_sale['total'] for month_sale in last_year_sales_group_by_month]
 
-
-    labels = [day_sale['created_at__date'] for day_sale in last_seven_days_sales_group_by_day]
-    data = [day_sale['total'] for day_sale in last_seven_days_sales_group_by_day]
-
-    # labels = [item['product__name'] for item in most_sold_products]
-    # data = [item['total_sales'] for item in most_sold_products]
     backgroundColor = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB','#d2d6de', '#2D5DEB', '#3c8dbc', '#d2d6de', '#2D5DEB']
     donutData = {
         'labels': labels,

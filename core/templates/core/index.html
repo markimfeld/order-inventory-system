@@ -33,9 +33,9 @@
         <!-- small box -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>${{ revenue.value }}</h3>
+                <h3>${{ weekly_billing }}</h3>
 
-                <p>Facturación</p>
+                <p>Facturación semanal</p>
             </div>
             <div class="icon">
                 <i class="ion ion-cash"></i>
@@ -48,12 +48,12 @@
         <!-- small box -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>{{ customers }}</h3>
+                <h3>${{ weekly_revenue }}</h3>
 
-                <p>Clientes</p>
+                <p>Ganancia semanal</p>
             </div>
             <div class="icon">
-                <i class="ion ion-person-add"></i>
+                <i class="ion ion-cash"></i>
             </div>
             <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
         </div>
@@ -63,12 +63,12 @@
         <!-- small box -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>{{ sales.count }}</h3>
+                <h3>${{ weekly_billing_no_paid }}</h3>
 
-                <p>Ventas</p>
+                <p>Facturación no pagada</p>
             </div>
             <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="ion ion-cash"></i>
             </div>
             <a href="#" class="small-box-footer">Más info<i class="fas fa-arrow-circle-right"></i></a>
         </div>
@@ -77,24 +77,42 @@
 </div>
 <!-- /.row -->
 
+<div class="row">
+    <div class="col-12 col-sm-6">
+        <!-- BAR CHART -->
+        <div class="card card-success">
+          <div class="card-header">
+            <h3 class="card-title">Ventas los últimos 7 días</h3>
+
+          </div>
+          <div class="card-body">
+            <div class="chart">
+                <canvas data-url="{% url 'core:last_seven_days_sales' %}" id="barChart" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <div class="col-12 col-sm-6">
+        <!-- BAR CHART -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Venta del último año</h3>
+
+          </div>
+          <div class="card-body">
+            <div class="chart">
+                <canvas data-url="{% url 'core:last_year_sales' %}" id="barChartYear" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 100%;"></canvas>
+            </div>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
 
 <div class="row">
-    <div class="col-12 col-sm-7">
-         <!-- BAR CHART -->
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Ventas los últimos 7 días</h3>
-
-              </div>
-              <div class="card-body">
-                <div class="chart">
-                    <canvas data-url="{% url 'core:get-most-sold-products' %}" id="barChart" style="min-height: 250px; height: 250px; max-height: 500px; max-width: 100%;"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-    </div>
     <div class="col-12 col-sm-5">
         <div class="card">
             <div class="card-header">
@@ -172,13 +190,60 @@
         success: data => {
             labels = data.labels;
             datasets = [{
-                label: 'Venta en el día',
+                label: 'Venta diaria',
                 data: data.datasets[0].data,
                 backgroundColor: data.backgroundColor
             }]
             pieChart.data.labels = labels;
             pieChart.data.datasets = datasets;
             pieChart.update();
+        }
+    })
+
+    const urlDataYear = $('#barChartYear').data('url');
+    //-------------
+    //- PIE CHART -
+    //-------------
+    // Get context with jQuery - using jQuery's .get() method.
+    const pieChartCanvasYear = $('#barChartYear').get(0).getContext('2d')
+    //Create pie or douhnut chart
+    // You can switch between pie and douhnut using the method below.
+    const pieChartYear = new Chart(pieChartCanvasYear, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '',
+                data: [],
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 100,
+                    }
+                }]
+            }
+        }
+    })
+    
+    $.ajax({
+        url: urlDataYear,
+        method: 'GET',
+        success: data => {
+            labels = data.labels;
+            datasets = [{
+                label: 'Venta mensual',
+                data: data.datasets[0].data,
+                backgroundColor: data.backgroundColor,
+                fill: false,
+                borderColor: 'rgba(0, 0, 0, 0.5)',
+            }]
+            pieChartYear.data.labels = labels;
+            pieChartYear.data.datasets = datasets;
+            pieChartYear.update();
         }
     })
 </script>

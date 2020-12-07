@@ -3,7 +3,8 @@ from django.urls import path, re_path
 
 from core.views import (
     # REPORTS
-    get_most_sold_products,
+    get_last_seven_days_sales,
+    get_year_sales_group_by_month,
 )
 
 from core.views import (
@@ -109,7 +110,8 @@ urlpatterns = [
     path('customers/deactivate/<int:pk>/', login_required(CustomerDeactivateView.as_view()), name='customer-deactivate'),
     path('customers/activate/<int:pk>/', login_required(CustomerActivateView.as_view()), name='customer-activate'),
     # REPORTS
-    path('reports/most-sold-products/', login_required(get_most_sold_products), name='get-most-sold-products'),
+    path('reports/last-seven-days-sales/', login_required(get_last_seven_days_sales), name='last_seven_days_sales'),
+    path('reports/last-year-sales/', login_required(get_year_sales_group_by_month), name='last_year_sales'),
     path('reports/', login_required(Report.as_view()), name='report'),
     path('reports/<int:start_year>/<int:start_month>/<int:start_day>/<int:end_year>/<int:end_month>/<int:end_day>/', login_required(ReportDetails.as_view()), name='report_details'),
     # USERS
