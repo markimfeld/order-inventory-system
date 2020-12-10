@@ -42,6 +42,7 @@
     <div class="form-group col-sm-4"> 
         <label for="user">Cliente(*):</label> 
         {{ form.customer|add_class:'form-control select2bs4' }}
+        <a href="{% url 'core:customer-add-shortcut' %}" class="btn btn-link" data-toggle="modal" data-target="#modal-default">Agregar cliente</a>
     </div>
     <div class="form-group col-sm-4"> 
         <label for="estado">Estado(*):</label> 
@@ -107,6 +108,28 @@
         <!-- /.card -->
     </div>
 </div>
+
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Nuevo cliente</h4>
+            </div>
+            <div class="modal-body">
+                {{ form.as_p }}
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Guardar nuevo cliente</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
 {% endblock %}
 
 {% block bottoms %}

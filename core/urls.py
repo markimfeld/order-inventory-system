@@ -105,6 +105,7 @@ urlpatterns = [
     # CUSTOMERS
     path('customers/', login_required(CustomerView.as_view()), name='customers'),
     path('customers/add/', login_required(CustomerCreateView.as_view()), name='customer-add'),
+    path('customers/add/', login_required(CustomerCreateView.as_view()), name='customer-add-shortcut'),
     path('customers/edit/<int:pk>/', login_required(CustomerEditView.as_view()), name='customer-edit'),
     path('customers/detail/<int:pk>/', login_required(CustomerDetailView.as_view()), name='customer-detail'),
     path('customers/deactivate/<int:pk>/', login_required(CustomerDeactivateView.as_view()), name='customer-deactivate'),

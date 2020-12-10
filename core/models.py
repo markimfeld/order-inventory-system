@@ -40,6 +40,13 @@ class Item(models.Model):
         return self.name
 
     def has_inventory(self, quantity):
+        """ 
+            quantity: is the quantity asked by the customer of that especific item
+            example: 5 units of one especific item
+        """
+        if type(quantity) != int:
+            raise Exception("Tipo de dato incorrecto")
+
         return self.inventory >= quantity
 
     def activate(self):
