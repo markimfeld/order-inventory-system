@@ -163,6 +163,11 @@ class ProductTestCase(TestCase):
         
         self.assertEqual(combo1.get_items_detail(), items)
 
+    def test_get_absolute_url(self):
+        combo1 = Product.objects.get(name='combo 1')
+        path = f'/products/detail/{combo1.pk}/'
+        self.assertEqual(combo1.get_absolute_url(), path)
+
     def test_product_str(self):
         combo1 = Product.objects.get(name='combo 1')
         self.assertEqual(str(combo1), 'combo 1')
