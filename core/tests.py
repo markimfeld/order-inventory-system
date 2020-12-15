@@ -112,15 +112,42 @@ class ItemTestCase(TestCase):
         self.assertTrue(Item._meta.get_field('is_active').default, True)
 
 
-class ProductActiveManagerTestCase(TestCase):
+class ProductManagerTestCase(TestCase):
 
     def setUp(self):
-        combo = Category.objects.create(name='Combo')
-        Product.objects.create(name='combo 1', price=1.0, cost=1.0, category=combo)
-        Product.objects.create(name='combo 2', price=1.0, cost=1.0, category=combo)
-        Product.objects.create(name='combo 3', price=1.0, cost=1.0, is_active=False, category=combo)
+        criolla = Item.objects.create(name='criolla', cost=21.0)
+        pascualina = Item.objects.create(name='pascualina', cost=34.40)
+        raviol = Item.objects.create(name='raviol', cost=54.50)
+        fideo = Item.objects.create(name='fideo', cost=34.40)
 
-    def test_get_queryset(self):
+        combo = Category.objects.create(name='Combo')
+        combo1 = Product.objects.create(name='combo 1', price=1.0, cost=1.0, category=combo)
+        combo1.items.add(criolla, criolla, raviol)
+        combo2 = Product.objects.create(name='combo 2', price=1.0, cost=1.0, category=combo)
+        combo2.items.add(pascualina, criolla, criolla, criolla)
+        combo3 = Product.objects.create(name='combo 3', price=1.0, cost=1.0, is_active=False, category=combo)
+        combo3.items.add(fideo, fideo, criolla)
+
+    def test_get_queryset_active_manager(self):
         active_products = Product.active_products.all()
         self.assertEqual(len(active_products), 2)
 
+class ProductTestCase(TestCase):
+    
+    def setUp(self):
+        combo = Category.objects.create(name='combo')
+        criolla = Item.objects.create(name='criolla', cost=21.0)
+        criolla2 = Item.objects.create(name='criolla', cost=21.0)
+        raviol = Item.objects.create(name='raviol', cost=54.50)
+
+        combo = Category.objects.create(name='Combo')
+        combo1 = Product.objects.create(name='combo 1', price=150.0, cost=96.5, category=combo)
+        combo1.items.add(criolla, criolla2, raviol)
+
+    def test_get_revenue(self):
+        combo1 = Product.objects.get(name='combo 1')
+        self.assertEqual(combo1.get_revenue(), 53.5)
+
+    def test_get_cost(self):
+        combo1 = Product.objects.get(name='combo 1')
+        self.assertEqual(combo1.get_cost(), 96.5)
