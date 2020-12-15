@@ -1,9 +1,13 @@
-from django.test import TestCase
+from django.test import (
+    TestCase,
+    Client,
+)
 
 from core.models import (
     Category,
     Item,
-    Product
+    Product,
+    ProductItem,
 )
 # Create your tests here.
 
@@ -135,14 +139,15 @@ class ProductManagerTestCase(TestCase):
 class ProductTestCase(TestCase):
     
     def setUp(self):
-        combo = Category.objects.create(name='combo')
         criolla = Item.objects.create(name='criolla', cost=21.0)
-        criolla2 = Item.objects.create(name='criolla', cost=21.0)
         raviol = Item.objects.create(name='raviol', cost=54.50)
 
         combo = Category.objects.create(name='Combo')
         combo1 = Product.objects.create(name='combo 1', price=150.0, cost=96.5, category=combo)
-        combo1.items.add(criolla, criolla2, raviol)
+        combo2 = Product.objects.create(name='combo 2', price=150.0, cost=96.5, category=combo, is_active=False)
+        produc_item1 = ProductItem.objects.create(item=criolla, product=combo1, quantity=2)
+        produc_item2 = ProductItem.objects.create(item=raviol, product=combo1, quantity=1)
+
 
     def test_get_revenue(self):
         combo1 = Product.objects.get(name='combo 1')
@@ -151,3 +156,36 @@ class ProductTestCase(TestCase):
     def test_get_cost(self):
         combo1 = Product.objects.get(name='combo 1')
         self.assertEqual(combo1.get_cost(), 96.5)
+
+    def test_get_items_detail(self):
+        combo1 = Product.objects.get(name='combo 1')
+        items = [('criolla', 2), ('raviol', 1)]
+        
+        self.assertEqual(combo1.get_items_detail(), items)
+
+    def test_product_str(self):
+        combo1 = Product.objects.get(name='combo 1')
+        self.assertEqual(str(combo1), 'combo 1')
+
+    def test_product_activate(self):
+        combo2 = Product.objects.get(name='combo 2')
+        combo2.activate()
+        self.assertTrue(combo2.is_active)
+
+    def test_product_deactivate(self):
+        combo1 = Product.objects.get(name='combo 1')
+        combo1.deactivate()
+        self.assertFalse(combo1.is_active)
+
+    def test_has_stock(self):
+        combo1 = Product.objects.get(name='combo 1')
+        
+        self.assertFalse(combo1.has_stock())
+
+    def test_has_no_stock(self):
+        combo1 = Product.objects.get(name='combo 1')
+        raviol = Item.objects.get(name='raviol')
+        raviol.increase_inventory(10)
+        criolla = Item.objects.get(name='criolla')
+        criolla.increase_inventory(10)
+        self.assertTrue(combo1.has_stock())
