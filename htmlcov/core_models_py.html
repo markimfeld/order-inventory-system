@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-    <title>Coverage for core/models.py: 74%</title>
+    <title>Coverage for core/models.py: 77%</title>
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript" src="jquery.hotkeys.js"></script>
@@ -17,13 +17,13 @@
 <div id="header">
     <div class="content">
         <h1>Coverage for <b>core/models.py</b> :
-            <span class="pc_cov">74%</span>
+            <span class="pc_cov">77%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             267 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">198 run</button>
-            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">69 missing</button>
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">206 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">61 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -226,7 +226,7 @@
     <p id="t173" class="run"><span class="n"><a href="#t173">173</a></span><span class="t">        <span class="nam">verbose_name_plural</span> <span class="op">=</span> <span class="str">'Countries'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t174" class="pln"><span class="n"><a href="#t174">174</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t175" class="run"><span class="n"><a href="#t175">175</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t176" class="mis show_mis"><span class="n"><a href="#t176">176</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t176" class="run"><span class="n"><a href="#t176">176</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
     <p id="t177" class="pln"><span class="n"><a href="#t177">177</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t178" class="pln"><span class="n"><a href="#t178">178</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t179" class="run"><span class="n"><a href="#t179">179</a></span><span class="t"><span class="key">class</span> <span class="nam">Province</span><span class="op">(</span><span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -237,7 +237,7 @@
     <p id="t184" class="run"><span class="n"><a href="#t184">184</a></span><span class="t">        <span class="nam">verbose_name_plural</span> <span class="op">=</span> <span class="str">'Provinces'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t185" class="pln"><span class="n"><a href="#t185">185</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t186" class="run"><span class="n"><a href="#t186">186</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t187" class="mis show_mis"><span class="n"><a href="#t187">187</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t187" class="run"><span class="n"><a href="#t187">187</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
     <p id="t188" class="pln"><span class="n"><a href="#t188">188</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t189" class="pln"><span class="n"><a href="#t189">189</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t190" class="run"><span class="n"><a href="#t190">190</a></span><span class="t"><span class="key">class</span> <span class="nam">City</span><span class="op">(</span><span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -248,7 +248,7 @@
     <p id="t195" class="run"><span class="n"><a href="#t195">195</a></span><span class="t">        <span class="nam">verbose_name_plural</span> <span class="op">=</span> <span class="str">'Cities'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t196" class="pln"><span class="n"><a href="#t196">196</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t197" class="run"><span class="n"><a href="#t197">197</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t198" class="mis show_mis"><span class="n"><a href="#t198">198</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t198" class="run"><span class="n"><a href="#t198">198</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
     <p id="t199" class="pln"><span class="n"><a href="#t199">199</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t200" class="pln"><span class="n"><a href="#t200">200</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t201" class="run"><span class="n"><a href="#t201">201</a></span><span class="t"><span class="key">class</span> <span class="nam">Address</span><span class="op">(</span><span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -272,20 +272,20 @@
     <p id="t219" class="pln"><span class="n"><a href="#t219">219</a></span><span class="t"><span class="com"># SUPPLIERS</span>&nbsp;</span><span class="r"></span></p>
     <p id="t220" class="run"><span class="n"><a href="#t220">220</a></span><span class="t"><span class="key">class</span> <span class="nam">Supplier</span><span class="op">(</span><span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t221" class="run"><span class="n"><a href="#t221">221</a></span><span class="t">    <span class="nam">name</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">CharField</span><span class="op">(</span><span class="nam">max_length</span><span class="op">=</span><span class="num">64</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t222" class="run"><span class="n"><a href="#t222">222</a></span><span class="t">    <span class="nam">phone</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">CharField</span><span class="op">(</span><span class="nam">max_length</span><span class="op">=</span><span class="num">64</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t222" class="run"><span class="n"><a href="#t222">222</a></span><span class="t">    <span class="nam">phone</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">CharField</span><span class="op">(</span><span class="nam">max_length</span><span class="op">=</span><span class="num">64</span><span class="op">,</span> <span class="nam">blank</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">null</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t223" class="run"><span class="n"><a href="#t223">223</a></span><span class="t">    <span class="nam">is_active</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">BooleanField</span><span class="op">(</span><span class="nam">default</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t224" class="run"><span class="n"><a href="#t224">224</a></span><span class="t">    <span class="nam">address</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">ForeignKey</span><span class="op">(</span><span class="nam">Address</span><span class="op">,</span> <span class="nam">on_delete</span><span class="op">=</span><span class="nam">models</span><span class="op">.</span><span class="nam">PROTECT</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t224" class="run"><span class="n"><a href="#t224">224</a></span><span class="t">    <span class="nam">address</span> <span class="op">=</span> <span class="nam">models</span><span class="op">.</span><span class="nam">ForeignKey</span><span class="op">(</span><span class="nam">Address</span><span class="op">,</span> <span class="nam">on_delete</span><span class="op">=</span><span class="nam">models</span><span class="op">.</span><span class="nam">PROTECT</span><span class="op">,</span> <span class="nam">blank</span><span class="op">=</span><span class="key">True</span><span class="op">,</span> <span class="nam">null</span><span class="op">=</span><span class="key">True</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t225" class="pln"><span class="n"><a href="#t225">225</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t226" class="run"><span class="n"><a href="#t226">226</a></span><span class="t">    <span class="key">def</span> <span class="nam">activate</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t227" class="mis show_mis"><span class="n"><a href="#t227">227</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">is_active</span> <span class="op">=</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t228" class="mis show_mis"><span class="n"><a href="#t228">228</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t227" class="run"><span class="n"><a href="#t227">227</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">is_active</span> <span class="op">=</span> <span class="key">True</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t228" class="run"><span class="n"><a href="#t228">228</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t229" class="pln"><span class="n"><a href="#t229">229</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t230" class="run"><span class="n"><a href="#t230">230</a></span><span class="t">    <span class="key">def</span> <span class="nam">deactivate</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t231" class="mis show_mis"><span class="n"><a href="#t231">231</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">is_active</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t232" class="mis show_mis"><span class="n"><a href="#t232">232</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t231" class="run"><span class="n"><a href="#t231">231</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">is_active</span> <span class="op">=</span> <span class="key">False</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t232" class="run"><span class="n"><a href="#t232">232</a></span><span class="t">        <span class="nam">self</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t233" class="pln"><span class="n"><a href="#t233">233</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t234" class="run"><span class="n"><a href="#t234">234</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t235" class="mis show_mis"><span class="n"><a href="#t235">235</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t235" class="run"><span class="n"><a href="#t235">235</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
     <p id="t236" class="pln"><span class="n"><a href="#t236">236</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t237" class="pln"><span class="n"><a href="#t237">237</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t238" class="run"><span class="n"><a href="#t238">238</a></span><span class="t"><span class="key">class</span> <span class="nam">Purchase</span><span class="op">(</span><span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -444,7 +444,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.3</a>,
-            created at 2020-12-16 10:57 -0300
+            created at 2020-12-16 14:07 -0300
         </p>
     </div>
 </div>

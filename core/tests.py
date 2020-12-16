@@ -8,7 +8,12 @@ from core.models import (
     Item,
     Product,
     ProductItem,
-    Status
+    Status,
+    Country,
+    Province,
+    City,
+    ProductItem,
+    Supplier
 )
 # Create your tests here.
 
@@ -196,6 +201,7 @@ class ProductTestCase(TestCase):
         criolla.increase_inventory(10)
         self.assertTrue(combo1.has_stock())
 
+
 class StatusTestCase(TestCase):
 
     def setUp(self):
@@ -204,3 +210,58 @@ class StatusTestCase(TestCase):
     def test_status_str(self):
         status = Status.objects.get(name='Preparar')
         self.assertEqual(str(status), 'Preparar')
+    
+
+class CountryTestCase(TestCase):
+
+    def setUp(self):
+        Country.objects.create(name='Argentina')
+    
+    def test_country_str(self):
+        country = Country.objects.get(name='Argentina')
+        self.assertEqual(str(country), 'Argentina')
+
+
+class ProvinceTestCase(TestCase):
+
+    def setUp(self):
+        country = Country.objects.create(name='Argentina')
+        Province.objects.create(name='Chaco', country=country)
+    
+    def test_province_str(self):
+        province = Province.objects.get(name='Chaco')
+        self.assertEqual(str(province), 'Chaco')
+
+
+class CityTestCase(TestCase):
+
+    def setUp(self):
+        country = Country.objects.create(name='Argentina')
+        province = Province.objects.create(name='Chaco', country=country)
+        City.objects.create(name='Machagai', province=province)
+
+    def test_city_str(self):
+        province = Province.objects.get(name='Chaco')
+        city = City.objects.get(name='Machagai')
+        self.assertEqual(str(city), 'Machagai')
+
+
+class SupplierTestCase(TestCase):
+
+    def setUp(self):
+        Supplier.objects.create(name='NONO', is_active=False)
+        Supplier.objects.create(name='Bochi')
+        
+    def test_supplier_activate(self):
+        supplier = Supplier.objects.get(name='NONO')
+        supplier.activate()
+        self.assertTrue(supplier.is_active)
+    
+    def test_supplier_deactivate(self):
+        supplier = Supplier.objects.get(name='Bochi')
+        supplier.deactivate()
+        self.assertFalse(supplier.is_active)
+
+    def test_supplier_str(self):
+        supplier = Supplier.objects.get(name='NONO')
+        self.assertEqual(str(supplier), 'NONO')

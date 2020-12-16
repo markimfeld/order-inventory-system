@@ -219,9 +219,9 @@ class Address(models.Model):
 # SUPPLIERS
 class Supplier(models.Model):
     name = models.CharField(max_length=64)
-    phone = models.CharField(max_length=64)
+    phone = models.CharField(max_length=64, blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    address = models.ForeignKey(Address, on_delete=models.PROTECT)
+    address = models.ForeignKey(Address, on_delete=models.PROTECT, blank=True, null=True)
 
     def activate(self):
         self.is_active = True
