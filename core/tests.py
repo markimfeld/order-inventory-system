@@ -1,3 +1,5 @@
+import datetime
+
 from django.test import (
     TestCase,
     Client,
@@ -13,7 +15,12 @@ from core.models import (
     Province,
     City,
     ProductItem,
-    Supplier
+    Supplier,
+    Purchase,
+    PurchaseItem,
+    Customer,
+    Sale,
+    SaleItem
 )
 # Create your tests here.
 
@@ -265,3 +272,60 @@ class SupplierTestCase(TestCase):
     def test_supplier_str(self):
         supplier = Supplier.objects.get(name='NONO')
         self.assertEqual(str(supplier), 'NONO')
+
+
+class PurchaseTestCase(TestCase):
+
+    def setUp(self):
+        supplier = Supplier.objects.create(name='NONO')
+        purchase = Purchase.objects.create(supplier=supplier)
+        item1 = Item.objects.create(name='criolla', cost=21.00)
+        item2 = Item.objects.create(name='pascualina', cost=34.40)
+        purchase_item1 = PurchaseItem.objects.create(item=item1, purchase=purchase, quantity=30, subtotal=630)
+        purchase_item2 = PurchaseItem.objects.create(item=item2, purchase=purchase, quantity=20, subtotal=688)
+    
+
+    def test_purchase_calculate_total(self):
+        purchase = Purchase.objects.all().first()
+        purchase.calculate_total()
+        self.assertEqual(purchase.total, 1318)
+    
+
+class PurchaseItemTestCase(TestCase):
+
+
+    def setUp(self):
+        supplier = Supplier.objects.create(name='NONO')
+        purchase = Purchase.objects.create(supplier=supplier)
+        item1 = Item.objects.create(name='criolla', cost=21.00)
+        purchase_item1 = PurchaseItem.objects.create(description='purchase1', item=item1, purchase=purchase, quantity=30)
+    
+    def test_purchaseitem_calculate_total(self):
+        purchase_item = PurchaseItem.objects.get(description='purchase1')
+        purchase_item.calculate_subtotal()
+        self.assertEqual(purchase_item.subtotal, 630)
+
+
+class CustomerTestCase(TestCase):
+
+    def setUp(self):
+        Customer.objects.create(first_name='Marcos', last_name='Imfeld', is_active=False)
+        Customer.objects.create(first_name='Luz', last_name='Imfeld')
+    
+    def test_customer_activate(self):
+        customer = Customer.objects.get(first_name='Marcos')
+        customer.activate()
+        self.assertTrue(customer.is_active)
+
+    def test_customer_deactivate(self):
+        customer = Customer.objects.get(first_name='Luz')
+        customer.deactivate()
+        self.assertFalse(customer.is_active)
+    
+    def test_customer_str(self):
+        customer = Customer.objects.get(first_name='Luz')
+        self.assertEqual(str(customer), 'Luz Imfeld')
+
+    def test_customer_full_name(self):
+        customer = Customer.objects.get(first_name='Luz')
+        self.assertEqual(str(customer.full_name), 'Luz Imfeld')

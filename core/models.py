@@ -1,3 +1,6 @@
+import datetime
+from django.utils.timezone import now
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Sum, Value
@@ -242,7 +245,7 @@ class Purchase(models.Model):
     items = models.ManyToManyField(Item, through='PurchaseItem')
     total = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     is_active = models.BooleanField(default=True)
-    purchased_at = models.DateTimeField()
+    purchased_at = models.DateTimeField(default=now)
 
     def calculate_total(self):
         total = self.get_items.aggregate(total=Sum('subtotal'))
