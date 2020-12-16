@@ -21,9 +21,9 @@
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
-            269 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">199 run</button>
-            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">70 missing</button>
+            267 statements &nbsp;
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">198 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">69 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -216,7 +216,7 @@
     <p id="t163" class="run"><span class="n"><a href="#t163">163</a></span><span class="t">        <span class="nam">verbose_name_plural</span> <span class="op">=</span> <span class="str">'Statuses'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t164" class="pln"><span class="n"><a href="#t164">164</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t165" class="run"><span class="n"><a href="#t165">165</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t166" class="mis show_mis"><span class="n"><a href="#t166">166</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t166" class="run"><span class="n"><a href="#t166">166</a></span><span class="t">        <span class="key">return</span> <span class="nam">self</span><span class="op">.</span><span class="nam">name</span>&nbsp;</span><span class="r"></span></p>
     <p id="t167" class="pln"><span class="n"><a href="#t167">167</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t168" class="pln"><span class="n"><a href="#t168">168</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t169" class="run"><span class="n"><a href="#t169">169</a></span><span class="t"><span class="key">class</span> <span class="nam">Country</span><span class="op">(</span><span class="nam">models</span><span class="op">.</span><span class="nam">Model</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -262,7 +262,7 @@
     <p id="t209" class="run"><span class="n"><a href="#t209">209</a></span><span class="t">        <span class="nam">verbose_name_plural</span> <span class="op">=</span> <span class="str">'Addresses'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t210" class="pln"><span class="n"><a href="#t210">210</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t211" class="run"><span class="n"><a href="#t211">211</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t212" class="run"><span class="n"><a href="#t212">212</a></span><span class="t">    <span class="key">def</span> <span class="nam">full_address</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t212" class="pln"><span class="n"><a href="#t212">212</a></span><span class="t">    <span class="key">def</span> <span class="nam">full_address</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t213" class="mis show_mis"><span class="n"><a href="#t213">213</a></span><span class="t">        <span class="key">return</span> <span class="str">f'{self.street} N&#186;{self.number} {self.neightborhood}'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t214" class="pln"><span class="n"><a href="#t214">214</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t215" class="run"><span class="n"><a href="#t215">215</a></span><span class="t">    <span class="key">def</span> <span class="nam">__str__</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -356,7 +356,7 @@
     <p id="t303" class="mis show_mis"><span class="n"><a href="#t303">303</a></span><span class="t">            <span class="nam">self</span><span class="op">.</span><span class="nam">save</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t304" class="pln"><span class="n"><a href="#t304">304</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t305" class="run"><span class="n"><a href="#t305">305</a></span><span class="t">    <span class="op">@</span><span class="nam">property</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t306" class="run"><span class="n"><a href="#t306">306</a></span><span class="t">    <span class="key">def</span> <span class="nam">full_name</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t306" class="pln"><span class="n"><a href="#t306">306</a></span><span class="t">    <span class="key">def</span> <span class="nam">full_name</span><span class="op">(</span><span class="nam">self</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t307" class="pln"><span class="n"><a href="#t307">307</a></span><span class="t">        <span class="str">"Return the customer's full name."</span>&nbsp;</span><span class="r"></span></p>
     <p id="t308" class="mis show_mis"><span class="n"><a href="#t308">308</a></span><span class="t">        <span class="key">return</span> <span class="str">f'{self.first_name} {self.last_name}'</span>&nbsp;</span><span class="r"></span></p>
     <p id="t309" class="pln"><span class="n"><a href="#t309">309</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
@@ -444,7 +444,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.3</a>,
-            created at 2020-12-15 15:14 -0300
+            created at 2020-12-16 10:57 -0300
         </p>
     </div>
 </div>

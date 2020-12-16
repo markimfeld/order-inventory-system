@@ -8,6 +8,7 @@ from core.models import (
     Item,
     Product,
     ProductItem,
+    Status
 )
 # Create your tests here.
 
@@ -196,5 +197,10 @@ class ProductTestCase(TestCase):
         self.assertTrue(combo1.has_stock())
 
 class StatusTestCase(TestCase):
-    pass
 
+    def setUp(self):
+        Status.objects.create(name='Preparar')
+    
+    def test_status_str(self):
+        status = Status.objects.get(name='Preparar')
+        self.assertEqual(str(status), 'Preparar')
