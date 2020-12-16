@@ -194,3 +194,7 @@ class ProductTestCase(TestCase):
         criolla = Item.objects.get(name='criolla')
         criolla.increase_inventory(10)
         self.assertTrue(combo1.has_stock())
+
+class StatusTestCase(TestCase):
+    pass
+
