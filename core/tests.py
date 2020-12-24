@@ -329,3 +329,36 @@ class CustomerTestCase(TestCase):
     def test_customer_full_name(self):
         customer = Customer.objects.get(first_name='Luz')
         self.assertEqual(str(customer.full_name), 'Luz Imfeld')
+
+
+class SaleTestCase(TestCase):
+
+
+    def setUp(self):
+        status = Status.objects.create(name='Preparar')
+        customer = Customer.objects.create(first_name='Marcos', last_name='Imfeld')
+        sale = Sale.objects.create(status=status, customer=customer)
+        criolla = Item.objects.create(name='criolla', cost=21.0, inventory=10)
+        pascualina = Item.objects.create(name='pascualina', cost=34.40, inventory=10)
+        raviol = Item.objects.create(name='raviol', cost=54.50, inventory=10)
+        category = Category.objects.create(name='combo')
+        combo1 = Product.objects.create(name='combo 1', price=150, cost=96.5, category=category)
+        combo2 = Product.objects.create(name='combo 2', price=150, cost=97.4, category=category)
+
+        productitem1 = ProductItem.objects.create(item=criolla, product=combo1, quantity=2)
+        productitem2 = ProductItem.objects.create(item=raviol, product=combo1, quantity=1)
+        
+        productitem3 = ProductItem.objects.create(item=criolla, product=combo2, quantity=3)
+        productitem4 = ProductItem.objects.create(item=pascualina, product=combo2, quantity=1)
+
+        saleitem1 = SaleItem.objects.create(product=combo1, sale=sale, quantity=2, subtotal=300)
+        saleitem2 = SaleItem.objects.create(product=combo2, sale=sale, quantity=1, subtotal=150)
+        saleitem3 = SaleItem.objects.create(product=combo2, sale=sale, quantity=3, subtotal=450)
+
+    
+    def test_sale_get_cost_sale(self):
+        sale = Sale.objects.get(status__name__exact='Preparar')
+
+        sale_cost = sale.get_cost_sale()
+
+        self.assertEqual(float(sale_cost), 582.60)
